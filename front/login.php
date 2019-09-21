@@ -23,5 +23,6 @@ function pass_credentials($username,$password){
     $output = curl_exec($ch);
     curl_close($ch);
     return $output;
+    console.log("curl passed to mid")
 }
 ?>

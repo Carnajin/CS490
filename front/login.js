@@ -5,15 +5,16 @@ function loginRequest(){
 		if(xhr.readyState == 4){
 			var xhrDisplay = document.getElementById('xhrDiv');
             xhrDisplay.innerHTML = xhr.responseText;
+            console.log("readystate is good (4)")
         }
     }
 
         var username = document.getElementById('user').value;
         var password = document.getElementById('password').value;
 
-        var credentials = {"uidUsers": username, "pwdUsers": password};
+        var credentials_json = {"uidUsers": username, "pwdUsers": password};
 
-    xhr.open('POST', MID_URL+"login.php", true);
-    xhr.send(credentials);
+    xhr.open('POST', "login.php", true);
+    xhr.send(JSON.stringify(credentials_json));
 
 }

@@ -3,8 +3,8 @@
         <h2>Random text</h2>
         <nav>
             <div class="login-info"> 
-                <input type="text" id="user" placeholder="UCID Username...">
-                <input type="password" id="password" placeholder="Password...">
+                <input id="user" type="text" name="user" placeholder="UCID Username...">
+                <input id="password" type="password" name="password" placeholder="Password...">
                 <button type="submit" value="submit-button" onclick="loginRequest();">Login</button>
                 <button type="submit" value="logout-button" onclick="logoutRequest()">Logout</button>
                 </div>

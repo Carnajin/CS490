@@ -29,7 +29,7 @@
 
 
 <script type="text/javascript">
-    var MID_URL="https://web.njit.edu/~vnp27/cs490/mid/"; /* Need to update url */
+    var MID_URL="https://web.njit.edu/~vnp27/cs490/mid/";
 </script>
 </html>
 
