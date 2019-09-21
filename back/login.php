@@ -1,4 +1,12 @@
 <?php
+$json_str = file_get_contents('php://input');
+$output = json_decode($json_str, true);
+$username="none";
+$password="none";
+
+if(isset($output['username'])) $username = $output['username'];
+if(isset($output['password'])) $username = $output['password'];
+
 include("account.php");
 $db = mysqli_connect($host,$username,$password,$project) OR die(mysqli_connect_error());
 mysqli_set_charset($db,'utf8');
