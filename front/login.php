@@ -16,10 +16,11 @@ function pass_credentials($username,$password){
     $url = "https://web.njit.edu/~vnp27/cs490/mid/login.php"; // var 2
     $data_string = http_build_query($data);
     $ch = curl_init($url); // init the curl function 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true); // destination
+    curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string); // contains user/pass, option to use string encode
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $output = curl_exec($ch);
+    echo $output;
     curl_close($ch);
     return $output;
     }
