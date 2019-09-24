@@ -7,6 +7,7 @@ function loginRequest(){
         document.getElementById('text').innerHTML = "Please enter both UCID and password to log in.";
       return false;
     }
+    
     else{
       document.getElementById('text').innerHTML = "";
     }
@@ -18,13 +19,13 @@ function loginRequest(){
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
 	xhr.onreadystatechange = function(){
 		if(this.readyState == 4 && this.status == 200){
-        var xhrDisplay = xhr.responseText;
-        console.log("readystate is good (4)")
-        }
-    }
+            var xhrDisplay = document.getElementById('text');
+            xhrDisplay.innerHTML = xhr.responseText;
 
-          // var FRONT_URL="https://web.njit.edu/~ajd88/cs490/front/";
+                  // var FRONT_URL="https://web.njit.edu/~ajd88/cs490/front/";
+
 
     xhr.send(credentials);
-
+        }
+    }
 }

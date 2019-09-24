@@ -2,8 +2,7 @@
 $username = $_POST ["username"];
 $password = $_POST ["password"];
 
-$json_str = file_get_contents('php://input');
-$output = json_decode($json_str, true);
+$json_str = json_decode(file_get_contents('php://input'), true);
 
 $credentials=pass_credentials($username, $password); // setting up the function
 $data = array("username" => $username, "password" =>$password); /// data that is passed
