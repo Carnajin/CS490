@@ -16,7 +16,7 @@ echo $res_project;
 function login_project($username,$password)
 {
 	$data = array('username' => $username,'password' =>password);
-	$url = "pm458/cs490/back/login.php";
+	$url = "https://web.njit.edu/~pm458/cs490/back/login.php";
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
