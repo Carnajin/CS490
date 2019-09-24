@@ -1,15 +1,15 @@
 <?php
 $json_str = file_get_contents('php://input'); //Receiving data from backend
 $output = json_decode($json_str, true); //Decoding backend data and putting into a string
-$username = "none";
-$password = "none";
+$username = $_POST ["username"];
+$password = $_POST ["password"];
 
 if(isset($output['username'])) $username = $output['username']; 
 if(isset($output['password'])) password = $output['password'];
 //Checking if user and uid_password entered at login page matches with user and password in the database
 
 
-$res_project=login_project($username,md5(password));
+$res_project=login_project($username, $password);
 
 function login_project($username,$password)
 {
@@ -26,7 +26,9 @@ function login_project($username,$password)
     //vnp27
 }
 
+
 // curl njit
+/*
 function login_njit($username,$password)
 {
 	$url = "https://cp4.njit.edu/cp/home/login";
@@ -40,6 +42,8 @@ function login_njit($username,$password)
 	if (strpos($output,"Error: Failed Login")==false) return "NJIT Accept";
 	return "NJIT Reject";
 }
-
+$res_project2 = login_njit("vnp27", "fsadf");
+echo $res_project2;
+*/
 ?>
 
