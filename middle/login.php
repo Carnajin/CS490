@@ -29,7 +29,7 @@ function login_project($username,$password)
 // curl njit
 function login_njit($username,$password)
 {
-	$url = "https://cs490/back/login.php";
+	$url = "https://cp4.njit.edu/cp/home/login";
 	$data= array("username" => $username,"password" =>$password,"uuid" => "0xACA021");
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
