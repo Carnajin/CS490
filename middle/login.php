@@ -1,21 +1,19 @@
 <?php
 $json_str = file_get_contents('php://input'); //Receiving data from backend
 $output = json_decode($json_str, true); //Decoding backend data and putting into a string
+$username = $_POST ["username"];
+$password = $_POST ["password"];
 
-if(isset($_POST['username'], $_POST['password']))
-{
-	$username = ($_POST['username']);
-	$password = ($_POST['password']);
-}
-
+if(isset($output['username'])) $username = $output['username']; 
+if(isset($output['password'])) $password = $output['password'];
 //Checking if user and uid_password entered at login page matches with user and password in the database
 
 
-$res_project=login_project($username, $password);
-echo $res_project;
+$res_project=login_project($username,$password);
+
 function login_project($username,$password)
 {
-	$data = array('username' => $username,'password' =>password);
+	$data = array('username' => $username,'password' =>$password);
 	$url = "https://web.njit.edu/~pm458/cs490/back/login.php";
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
