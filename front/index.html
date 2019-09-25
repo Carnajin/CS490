@@ -1,32 +1,30 @@
 <script>
-        function X(){
-            var Y = document.querySelector("form");
+        function ajax(){
+            var fields = document.querySelector("form");
     
             var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function() { 
                 if (this.readyState == 4 && this.status == 200) {
-    
     
                     myObj = JSON.parse(this.responseText);
     
-                    var answerNJIT = Number(myObj.njit);
-                    var answerBack = Number(myObj.back);
+                    var resNJIT = Number(myObj.njit);
+                    var respBack = Number(myObj.back);
     
                     document.getElementById("answer").innerHTML = this.responseText;
     
     
-                    if (answerNJIT == 0){
-                        if (answerBack == 0){
+                    if (respNJIT == 0){
+                        if (respBack == 0){
                             document.getElementById("answer").innerHTML = "No access to NJIT & No access to database";
                         }
-                        else if(answerBack == 1){
+                        else if(respBack == 1){
                             document.getElementById("answer").innerHTML = "No access to NJIT & Welcome to database";
                         }
                     }
-                    else if (answerNJIT == 1){
-                        console.log("if statement");
-                        if (answerBack == 0){
-                            document.getElementById("answer").innerHTML = "Welcome to NJIT & NO access to database";
+                    else if (respNJIT == 1){
+                             if (answerBack == 0){
+                                document.getElementById("answer").innerHTML = "Welcome to NJIT & NO access to database";
                         }
                     }
                     console.log("myobj");
@@ -36,29 +34,29 @@
                     console.log(answerBack);
                 }
             };
-    
             xhr.open("POST", "login.php", true);
-            xhr.send(new FormData(Y));
+            xhr.send(new FormData(fields));
         };
     </script>
     
     <body>
-    LOGIN FORM
+    CS490 - Alpha
     <br>
     <br>
     <br>
     
     <form >
     
-        <b>Username: </b> <input type="text" name="ucid"/><br>
-        <b>Password: </b> <input type="password" name="pass"/><br>
-        <button type="button" id="but">submit</button>
+        <b>Username: </b> <input type="text" name="ucid" placeholder="UCID..."/><br>
+        <b>Password: </b> <input type="password" name="pass" placeholder="Password..."/><br>
+        <button type="button" id="submit">submit</button>
         <p id="answer">
         </p>
     
         <script>
-            var Z = document.getElementById("but");
-            Z.addEventListener("click", X);
+            var submit = document.getElementById("submit");
+            submit.addEventListener("click", ajax);
+
         </script>
     
     </form>
