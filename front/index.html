@@ -1,35 +1,66 @@
-<!-- Anthony Dayer
-     CS490 Project
-     Alpha Phase
- -->
- <html>
-    <head>
-        <meta charset="utf-8">
-        <link href="styles.css" rel="stylesheet">
-        <title>CS490 Project - Alpha</title>
-        <script src="login.js" type="text/javascript"></script>
-        <script src="logout.js" type="text/javascript"></script>
-    </head>
+<script>
+        function X(){
+            var Y = document.querySelector("form");
+    
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
     
     
+                    myObj = JSON.parse(this.responseText);
     
-        <body>
-            <form>
-        <h1>This is the alpha.</h1>
-            <h2>Random text</h2>
-              <div class="login-info"> 
-                    <input id="username:login" type="text" name="username:login" placeholder="UCID Username...">
-                    <input id="password:login" type="password" name="password:login" placeholder="Password...">
-                    <input type="button" value="Submit" onclick="loginRequest()">
-                    <button type="submit" value="logout-button" onclick="logoutRequest();">Logout</button>
-                    </div>
+                    var answerNJIT = Number(myObj.njit);
+                    var answerBack = Number(myObj.back);
     
-                    <p><span id="text" style="color:red"></span></p>
-                    <p><span id="deRes" style="color:blue"></span></p>
-                    <p><span id="njitRes" style="color:blue"></span></p>
-            </form>
-        </body>
- 
+                    document.getElementById("answer").innerHTML = this.responseText;
+    
+    
+                    if (answerNJIT == 0){
+                        if (answerBack == 0){
+                            document.getElementById("answer").innerHTML = "No access to NJIT & No access to database";
+                        }
+                        else if(answerBack == 1){
+                            document.getElementById("answer").innerHTML = "No access to NJIT & Welcome to database";
+                        }
+                    }
+                    else if (answerNJIT == 1){
+                        console.log("if statement");
+                        if (answerBack == 0){
+                            document.getElementById("answer").innerHTML = "Welcome to NJIT & NO access to database";
+                        }
+                    }
+                    console.log("myobj");
+                    console.log(myObj);
+    
+                    console.log(answerNJIT);
+                    console.log(answerBack);
+                }
+            };
+    
+            xhr.open("POST", "login.php", true);
+            xhr.send(new FormData(Y));
+        };
+    </script>
+    
+    <body>
+    LOGIN FORM
+    <br>
+    <br>
+    <br>
+    
+    <form >
+    
+        <b>Username: </b> <input type="text" name="ucid"/><br>
+        <b>Password: </b> <input type="password" name="pass"/><br>
+        <button type="button" id="but">submit</button>
+        <p id="answer">
+        </p>
+    
+        <script>
+            var Z = document.getElementById("but");
+            Z.addEventListener("click", X);
+        </script>
+    
+    </form>
+    </body>
     </html>
-    
-    <!-- ajd88, vnp27, pm458 -->
