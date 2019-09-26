@@ -1,0 +1,60 @@
+<script>
+        function ajax(){
+            var fields = document.querySelector("form");
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() { 
+                if (this.readyState == 4 && this.status == 200) {
+//-- Used to search for the boolean response -----------------------------------
+                    statusCode = JSON.parse(this.responseText);
+                    var respNJIT = Number(statusCode.njit);
+                    var respBack = Number(statusCode.back);
+//------------------------------------------------------------------------------   
+                    document.getElementById("response").innerHTML = this.responseText;
+    
+//-- Response conditions -------------------------------------------------------
+                    if (respBack == 0){
+                        if (respNJIT == 0){
+                            document.getElementById("response").innerHTML = "NJIT: Invalid Login -- Database: Invalid Login";
+                        }
+                        else if(respNJIT == 1){
+                            document.getElementById("response").innerHTML = "NJIT: Valid Login -- Database: Invalid Login";
+                        }
+                    }
+                    else if (respBack == 1){
+                             if (respNJIT == 0){
+                                document.getElementById("response").innerHTML = "NJIT: Invalid Login -- Database: Valid Login.";
+                        }
+                    } 
+//-- Check the status of all sent booleans values for login ---------------------                    
+                    console.log("Results for Connections:");
+                    console.log(statusCode);
+    
+                }
+            };
+            xhr.open("POST", "login.php", true); // Where to post to.
+            xhr.send(new FormData(fields)); // Send the fields of the form data
+        };
+    </script>
+    
+    <body>
+            <h1>CS490 - Login System.</h1>
+            <h2>Alpha: Version 1</h2>
+    <br>
+    <br>
+        
+    <form>
+    
+        <input type="text" name="ucid" placeholder="UCID..."/>
+        <input type="password" name="pass" placeholder="Password..."/>
+        <br><br>
+        <button type="button" id="submit">Login</button>
+        <p id="response" style="color:blue"></p>
+    
+        <script>
+            var submit = document.getElementById("submit");
+            submit.addEventListener("click", ajax);
+        </script>
+    
+    </form>
+    </body>
+    </html>
