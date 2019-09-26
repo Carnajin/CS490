@@ -1,5 +1,9 @@
 <?php
 //Checking if user and uid_password entered at login page matches with user and password in the database
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $username = $_POST["ucid"];
 $password = $_POST["pass"];
 
@@ -21,7 +25,7 @@ function login_project($username,$password)
 }
 
  //curl njit
- 
+
 $njitlogin = login_njit($username, $password);
 
 function login_njit($username,$password)
@@ -34,21 +38,18 @@ function login_njit($username,$password)
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $data); 
 	$output = curl_exec($ch);
+  if(strpos($output,"welcome") == true){
+    $out = array("njit"=>1);
+  }
+  else{
+    $out = array("njit"=>0);
+  }
 	curl_close ($ch);
  
-	return $output;
+	return $out;
+}
 
-}
-echo $njitlogin;
-/*if($njitlogin == "NJIT Accept")
-{
-  echo json_encode("1");
-  
-}
-else
-{
-  echo json_encode("0");
-}
-*/
+
+echo json_encode($njitlogin);
 ?>
 
