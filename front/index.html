@@ -5,53 +5,51 @@
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() { 
                 if (this.readyState == 4 && this.status == 200) {
-    
+//-- Used to search for the boolean response -----------------------------------
                     myObj = JSON.parse(this.responseText);
     
-                    var resNJIT = Number(myObj.njit);
+                    var respNJIT = Number(myObj.njit);
                     var respBack = Number(myObj.back);
-    
+//------------------------------------------------------------------------------   
                     document.getElementById("answer").innerHTML = this.responseText;
     
-    
+//-- Response conditions -------------------------------------------------------
                     if (respNJIT == 0){
                         if (respBack == 0){
-                            document.getElementById("answer").innerHTML = "No access to NJIT & No access to database";
+                            document.getElementById("answer").innerHTML = "NJIT: Invalid Login -- Database: Invalid Login.";
                         }
                         else if(respBack == 1){
-                            document.getElementById("answer").innerHTML = "No access to NJIT & Welcome to database";
+                            document.getElementById("answer").innerHTML = "NJIT: Invalid Login -- Database: Accepted Login.";
                         }
                     }
                     else if (respNJIT == 1){
                              if (answerBack == 0){
-                                document.getElementById("answer").innerHTML = "Welcome to NJIT & NO access to database";
+                                document.getElementById("answer").innerHTML = "NJIT: Accepted Login -- Database: Invalid Login.";
                         }
-                    }
-                    console.log("myobj");
+                    } 
+                    console.log("Results: myObj:");
                     console.log(myObj);
     
-                    console.log(answerNJIT);
-                    console.log(answerBack);
                 }
             };
-            xhr.open("POST", "login.php", true);
-            xhr.send(new FormData(fields));
+            xhr.open("POST", "login.php", true); // Where to post to.
+            xhr.send(new FormData(fields)); // Send the fields of the form data
         };
     </script>
     
     <body>
-    CS490 - Alpha
+            <h1>CS490 - Login System.</h1>
+            <h2>Alpha: Version 1</h2>
     <br>
     <br>
     <br>
     
-    <form >
+    <form>
     
-        <b>Username: </b> <input type="text" name="ucid" placeholder="UCID..."/><br>
-        <b>Password: </b> <input type="password" name="pass" placeholder="Password..."/><br>
-        <button type="button" id="submit">submit</button>
-        <p id="answer">
-        </p>
+        <input type="text" name="ucid" placeholder="UCID..."/><br>
+        <input type="password" name="pass" placeholder="Password..."/><br>
+        <button type="button" id="submit">Login</button>
+        <p id="answer"></p>
     
         <script>
             var submit = document.getElementById("submit");
