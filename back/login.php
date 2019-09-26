@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $usId=$_POST["ucid"];
 $pass=$_POST["pass"];
 include("account.php");
@@ -9,28 +13,27 @@ if(mysqli_connect_error()){
     exit();
 }
 
-
 mysqli_select_db($db,$project);
 /*$hash = password_hash($pass,PASSWORD_DEFAULT);
-$p = "update users set pwdUsers = '$hash' where uidUsers = '$usId'";
+$p = "update user set pwdUsers = '$hash' where uidUsers = '$usId'";
 print $hash;
 ($t = mysqli_query($db, $p)) or die (mysqli_error($db));
 
 */
-$s = "select * from users where uidUsers='$usId'";
+$s = "select * from user where uidUsers='$usId'";
 ($t = mysqli_query($db, $s)) or die (mysqli_error($db));
 $num = mysqli_num_rows($t);
 if($num == 0) {
-  $out = "false";
+  $out = 0;
 }
 else {
   $r = mysqli_fetch_array($t,MYSQLI_ASSOC);
   $h = $r['pwdUsers'];
   if(password_verify($pass,$h)){
-  $out = array("back"=>"1");
+  $out = 1;
   }
   else{
-  $out = array("back"=>"0");
+  $out = 0;
   }
 }
 echo json_encode($out);
