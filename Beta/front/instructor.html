@@ -1,0 +1,159 @@
+<style>
+    table, th, td {
+      border: 1px solid black;
+    }
+    div {
+      height: 100%;
+      width: 50%;
+      border-left: 2px solid black;
+    }
+    .window {
+      height: 100%;
+      width: 49%;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      overflow-x: hidden;
+      padding-top: 20px;
+      padding-left: 5px;
+    }
+    
+    .left {
+      left: 0;
+    }
+    
+    .right {
+      right: 0;
+    }
+    </style>
+
+<html>
+  <form id="mainForm">
+  <div class="window left">
+<p>Instructor Landing Page</p>
+<p id="welcome" style="color:blue"></p>
+
+<button type="button" id="newQuestion">New Question</button>
+<button type="button" id="createExam">Create Exam</button>
+<button type="button" id="viewExam">View Exams</button>
+<button type="button" id="logout">Logout</button>
+
+<fieldset>Information:<p id="field1"></p></fieldset>
+<fieldset>Operation:<p id="field2"></p></fieldset>
+
+</div>
+</form>
+
+<div class="window right">
+    <p>Question Bank:</p>
+</div>
+</html>
+
+<script>
+
+window.onload = function() { 
+  if (localStorage.getItem('ucid')) {
+    document.getElementById('welcome').innerHTML = "Welcome " + localStorage.getItem('ucid')+ "!"; 
+ }
+};
+
+//-------------------- Event Listeners -------------------------
+var newQ = document.getElementById("newQuestion");
+if(newQ){
+  newQ.addEventListener("click", newQuestion);
+};
+
+var createE = document.getElementById("createExam");
+if(createE){
+  createE.addEventListener("click", createExam);
+};
+
+var viewE = document.getElementById("viewExam");
+if(viewE){
+  viewE.addEventListener("click", viewExam);
+};
+
+var logoutF = document.getElementById("logout");
+if(logoutF){
+  logoutF.addEventListener("click", logout);
+};
+
+
+//------------- Globab Variables --------------------------------
+
+var msg = "";
+var getExamID = "";
+var getQuestonID = "";
+
+//------------- Main Functions ----------------------------------
+
+function createExam(){
+  console.log("Create Exam");
+  document.getElementById("field1").innerHTML = 'Please enter the following: 1] Exam name. 2] Add question to the exam from the question bank. 3] Select the points each question are worth.';
+  document.getElementById("field2").innerHTML = '\
+  <h2>Create Exam</h2>\
+  <br>\
+  <label>Exam Name:</label>\
+  <input type="text" id="examName">\
+  <br>\
+  <br>\
+  <button id="submitExam" type="button">Submit</button>';
+
+  var submitE = document.getElementById("submitExam");
+      submitE.addEventListener("click", function() {message = "CreateExam"; submit(setResp);});
+};
+
+function viewExam(){
+  console.log("View Exam");
+};
+
+function logout(){
+  console.log("Logout");
+  window.location.href = "index.html";
+};
+
+function newQuestion(){
+  console.log("New Question Click");
+   document.getElementById("field1").innerHTML = 'Please enter the following: 1] Function name. 2] Description. 3] Difficulty. 4] Topic. 5] Test Cases 1 and 2.';
+    document.getElementById("field2").innerHTML = '\
+        <label>Function Name:</label>\
+        <input type="text" id="functionName">\
+        <br>\
+        <label>Description:</label>\
+        <br>\
+        <textarea name="functionDesc" rows="8" cols="40"></textarea>\
+        <br>\
+        <label>Difficulty:</label>\
+        <select name="functionDiff">\
+          <option value="easy">Easy</option>\
+          <option value="medium">Medium</option>\
+          <option value="hard">Hard</option>\
+        </select>\
+        <label>Topic:</label>\
+        <select name="functionTopic">\
+          <option value="if">if</option>\
+          <option value="loop">loop</option>\
+          <option value="arithmatic">arithmatic</option>\
+        </select>\
+        <br>\
+        <br>\
+        <label>Test Case 1:</label>\
+        <input type="text" id="testCase1">\
+        <br>\
+        <label>Test Case 2:</label>\
+        <input type="text" id="testCase2">\
+        <br>\
+        <br>\
+        <button id="submitQuestion" type="button">Submit</button>';
+
+        var submitQ = document.getElementById("submitQuestion");
+      submitQ.addEventListener("click", function() {message = "CreateExam"; submit(setResp);});
+    };
+
+//---------------------- Question Bank function --------------------
+
+//---------------------- Response function -------------------------
+
+//---------------------- AJAX function -----------------------------
+
+</script>
