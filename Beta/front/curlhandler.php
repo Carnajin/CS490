@@ -1,42 +1,155 @@
 <?php
-//-- Set any error reporting --------------------------------------------
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//*****receive post data from user based on message post field*****
 
-//-- This will search for the POST data----------------------------------
+$message = $_POST["message"];
+$devMode = $_POST["devMode"];
 
-$functionN = $_POST["functionName"];
+switch($message) {
+  
+  case "Login":
+    $username = $_POST["ucid"];
+    $password = $_POST["pass"];
     
-$functionD = $_POST["functionDesc"];    
+    $comp = array(
+      "message" => $message,
+      "devMode" => $devMode,
+      "username" => $username,
+      "password" => $password
+    );
+    break;
+  
+  case "CreateQuestion":
+    $testCase1 = $_POST["tcs1"];
+    $testCase2 = $_POST["tcs2"];
+    $funcName = $_POST["question"];
+    $description = $_POST["description"];
+    $difficulty = $_POST["difficulty"];
+    $topic = $_POST["topic"];
     
-$functionDi = $_POST["functionDiff"];
+    $comp = array(
+      "message" => $message,
+      "tcs1" => $testCase1,
+      "tcs2" => $testCase2,
+      "question" => $funcName,
+      "description" => $description,
+      "difficulty" => $difficulty,
+      "topic" => $topic
+    );
+    break;
 
-$functionT = $_POST["functionTopic"];
+  case "CreateExam":    
+    $examName = $_POST["examName"];
+    $questionID = $_POST["questionID"];
+    $points = $_POST["points"];
     
-$testC1 = $_POST["tcs1"];
+    $comp = array(
+      "message" => $message,
+      "examName" => $examName,
+      "questionID" => $questionID,
+      "points" => $points
+    );
+    break;
+
+  case "ReleaseExam":
+    $examId = $_POST["examId"];
+    $questionID = $_POST["questionID"];
+    $comments = $_POST["comments"];
+    $grade = $_POST["grade"];
+    $loop = $_POST["loop"];
+    $return = $_POST["return"];
+    $funcName = $_POST["funcName"];
+    $extra = $_POST["extra"];
+   
+    $comp = array(
+      "message" => $message,
+      "devMode" => $devMode,
+      "examId" => $examId,
+      "questionID" => $questionID,
+      "comments" => $comments,
+      "grade" => $grade,
+      "loop" => $loop,
+      "return" => $return,
+      "funcName" => $funcName,
+      "extra" => $extra
+    );
+    break;
+
+  case "TakeExam":
+    $examId = $_POST["examId"];
+    $questionID = $_POST["questionID"];
+    $code = $_POST["code"];
+    $points = $_POST["points"];
     
-$testC2 = $_POST["tcs2"];
+    $comp = array(
+      "message" => $message,
+      "devMode" => $devMode,
+      "examId" => $examId,
+      "questionID" => $questionID,
+      "code" => $code,
+      "points" => $points
+    );
+    break;
     
-/*
-if(isset($_POST["examName"])){
-    $examN = $_POST["examName"];
-    }
-*/
+  case "StudentViewExam":
+    $examId = $_POST["examId"];
+  
+    $comp = array(
+      "message" => $message,
+      "devMode" => $devMode,
+      "examId" => $examId
+    );
+    break;
 
-$add = ["add"];
-//-----------------------------------------------------------------------
+  case "GetExam":
+    $examId = $_POST["examId"];
+  
+    $comp = array(
+      "message" => $message,
+      "devMode" => $devMode,
+      "examId" => $examId
+    );
+    break;
 
-$info = ["functionName" => $functionN, "functionDesc" => $functionD, "functionDiff" => $functionDi,
-         "functionTopic" => $functionT, "testCase1" => $testC1, "testCase2" => $testC2, "add" => $add];
+  case "GetQuestions":
+    $id = $_POST[$id];
+  
+    $comp = array(
+      "message" => $message,
+      "devMode" => $devMode,
+      "id" => $id
+    );
+    break;
+    
+  case "InstructorViewExam":
+    $examId = $_POST["examId"];
+    
+    $comp = array(
+      "message" => $message,
+      "devMode" => $devMode,
+      "examId" => $examId
+    );
+    break;
+  
+  default:
+    echo "defaulted case";
+}
 
-//-- cURL requst --------------------------------------------------------
-$ch = curl_init(); // init curl handler
-curl_setopt($ch, CURLOPT_POSTFIELDS, $info); // post the fields
-curl_setopt($ch, CURLOPT_URL, "https://web.njit.edu/~pm458/cs490/back/logic.php");
+//$comp = array("message" => "Login","devMode" => "true");
+//$comp = array("message" => "GetQuestions","devMode" => "true");
+//$comp = array("message" => "GetQuestions");
+//$comp = array("message" => "Login","username" => "ndl25","password" => "12345");
+
+//*****set up cURL transfer to middle (controller)*****
+
+$ch = curl_init("https://web.njit.edu/~pm458/cs490/back/logic.php");
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $comp);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch); // store response into variable
-curl_close($ch); // free up the curl handler
-echo $response; // get the response
-//-----------------------------------------------------------------------
+
+//*****Get JSON response and transfer to user*****
+
+$response = curl_exec($ch);
+curl_close($ch);
+echo $response;
 ?>

@@ -1,5 +1,210 @@
+
+<meta charset="utf-8"/>
+<!DOCTYPE html>
 <html>
-<body>
-<p>this is the student page</p>
-</body>
+  <head>
+    <title>Student Portal</title>
+    <style>
+    #examTitle{
+      text-align: center;
+    }
+    </style>
+  </head>
+  <body>
+    <form id="masterForm">
+      <h1>This is the STUDENT landing page.</h1>
+      <h2>Select an Exam:</h2>
+      <p id="insert0"></p>
+      <button id="btnLogout" type="button">Logout</button>
+      <p id="insert1"></p>
+      <p id="insert2"></p>
+    </form>
+  </body>
+  <script>
+  
+    //***************Event Listeners***************
+    
+    var btnLogout = document.getElementById("btnLogout");
+    btnLogout.addEventListener("click", logout);
+    
+    //***************Globals***************
+    
+    var message = "", questionID = [], points = [], gexid = "", gexname = "";
+    
+    //***************Logout***************
+    
+    function logout(){
+      window.location.href = "index.html";
+    }
+    
+    //***************Get/Take***************
+    
+    function getExams(){
+      message = "GetExam";
+      submit(actionVT);
+    }
+    
+    function actionVT(jsonObj){
+      var i, x = "", y = "", z = "", exname = "", exid = "", rel = "";
+      for(i=0; i<jsonObj.length; i++){
+        exid = jsonObj[i].examID;
+        exname = jsonObj[i].examName;
+        rel = jsonObj[i].releaseStatus;
+        if(rel == "2"){
+          x += '<br><button type="button" onclick="studentViewExam(\'' + exid + '\',\'' + exname + '\')">View</button> ' + exname;
+        } else if(rel == "0"){
+          y += '<br><button type="button" onclick="getExam(\'' + exid + '\',\'' + exname + '\')">Take</button> ' + exname;
+        } else{
+          z += '<br>Results not Posted For: ' + exname;
+        }
+      }
+      document.getElementById("insert0").innerHTML = x + y + z;
+    }
+    
+    //***************Take Exam***************
+    
+    function getExam(exid, exname){
+      gexid = exid;
+      gexname = exname;
+      console.log("Get Exam to Take");
+      message = "InstructorViewExam";
+      document.getElementById("insert1").innerHTML = '';
+      document.getElementById("insert2").innerHTML = '';
+      submit(buildExam);
+    }
+    
+    function buildExam(jsonObj){
+      var i, j = 1, x = "", pts = "", desc = "", qid = "";
+      questionID = [];
+      points = [];
+      for(i=0; i<jsonObj.length;i++){
+      
+      pts = jsonObj[i].points;
+      desc = jsonObj[i].description;
+      qid = jsonObj[i].questionID;
+      
+        x += '<h4>Question ' + j + ', ' + pts + ' Points:</h4>' + desc + '<h4>Answer:</h4><textarea name="codes[]" rows="10" cols="60"></textarea>';
+        questionID.push(qid);
+        points.push(pts);
+        j++;
+      }
+      console.log(questionID);
+      document.getElementById("insert1").innerHTML = '<fieldset id="examField"><legend><b>' + gexname + ' Exam</b></legend>' + x + '<br><br><button id="btn3" type="button">Submit</button></fieldset>';
+      var btn3 = document.getElementById("btn3");
+      btn3.addEventListener("click", takeExam);
+    }
+    
+    function takeExam(){
+      message = "TakeExam";
+      submit(setResp);
+    };
+    
+    function setResp(jsonObj){
+      var i;
+      getExams();
+      document.getElementById("examField").disabled = true;
+      document.getElementById("insert2").innerHTML = jsonObj.response;
+    }
+    
+    //***************View Exam Results***************
+    
+    function studentViewExam(exid, exname){
+      gexid = exid;
+      gexname = exname;
+      console.log("View Exam Results");
+      message = "StudentViewExam";
+      document.getElementById("insert1").innerHTML = '';
+      document.getElementById("insert2").innerHTML = '';
+      submit(buildExamView);
+    };
+    
+    function buildExamView(jsonObj){
+      var i, j = 1, k, w = "", x = "", y = 0, z = 0, desc = "", cd = "", gd = "", pt = "", comm = "", rd = "", func = "";
+      for(i = 0; i<jsonObj.length; i++){
+      
+        desc = jsonObj[i].description;
+        cd = jsonObj[i].code;
+        gd = jsonObj[i].grade;
+        pt = jsonObj[i].points;
+        comm = jsonObj[i].comments;
+        lp = jsonObj[i].loop;
+        rt = jsonObj[i].returna;
+        fn = jsonObj[i].funcName;
+        ex = jsonObj[i].extra;
+        w = '<table><tr><th>Test Cases</th></tr>';
+        
+        if(lp != "0"){
+          w += '<tr><td>Does not contain for loop: -' + lp;
+        }
+        if(rt != "0"){
+          w += '<tr><td>Does not use return statement: -' + rt;
+        }
+        if(fn != "0"){
+          w += '<tr><td>Incorrect function name: -' + fn;
+        }
+        if(ex != "0"){
+          w += '<tr><td>Extra reductions: -' + ex;
+        }
+        
+        w += '</table>';
+        x += '<fieldset><h3>Question ' + j + ':</h3>' + desc + '<h4>Answer:</h4><textarea rows="5" cols="30" disabled="true">' + cd + '</textarea><h4>Auto Grader Results:</h4>' + (w == '<table><tr><th>Test Cases</th></tr></table>' ? "No Reductions" : w) + '<br><br>Grade: ' + gd + '/' + pt + '<h4>Comments:</h4>' + comm + '</fieldset>';
+        y += Number(gd);
+        z += Number(pt);
+        j++;
+      }
+      document.getElementById("insert1").innerHTML = '<fieldset id="examTitle"><h2>' + gexname + ' Exam<h2></fieldset>' + x + '<fieldset><h2>Final Grade: ' + y + '/' + z + '</h2></fieldset>';
+    }
+    
+    //***************AJAX and FormData***************
+    
+    function submit(cFunction){
+      var formElement = new FormData(document.querySelector("form"));
+      
+      console.log(message);
+      formElement.append("message", message);
+      formElement.append("devMode", "false");
+      
+      if(message == "TakeExam"){
+        var i, code = [];
+        var codes = document.getElementsByName('codes[]');
+        for(i=0; i<questionID.length; i++){
+          code.push(codes[i].value + ";");
+        }
+        console.log(questionID);
+        console.log(code);
+        console.log(points);
+        formElement.append("examId", gexid);
+        formElement.append("questionID", questionID);
+        formElement.append("points", points);
+        formElement.append("code", code);
+      }
+      
+      if(message == "StudentViewExam"){
+        formElement.append("examId", gexname);
+      }
+      
+      if(message == "InstructorViewExam"){
+        formElement.append("examId", gexid);
+      }
+      
+      for(var pair of formElement.entries()){
+        console.log(pair[0]+ ', '+ pair[1]);
+      }
+      
+      var xhr = new XMLHttpRequest();
+      
+      xhr.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+          jsonObj = JSON.parse(this.responseText);
+          console.log(jsonObj);
+          cFunction(jsonObj);
+        }
+      };
+      
+      xhr.open("POST", "curlhandler.php", true);
+      xhr.send(formElement);
+    }
+    getExams();
+  </script>
 </html>
