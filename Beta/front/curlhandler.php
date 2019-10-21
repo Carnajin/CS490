@@ -2,21 +2,8 @@
 //*****receive post data from user based on message post field*****
 
 $message = $_POST["message"];
-$devMode = $_POST["devMode"];
 
 switch($message) {
-  
-  case "Login":
-    $username = $_POST["ucid"];
-    $password = $_POST["pass"];
-    
-    $comp = array(
-      "message" => $message,
-      "devMode" => $devMode,
-      "username" => $username,
-      "password" => $password
-    );
-    break;
   
   case "CreateQuestion":
     $testCase1 = $_POST["tcs1"];
@@ -46,7 +33,7 @@ switch($message) {
       "message" => $message,
       "examName" => $examName,
       "questionID" => $questionID,
-      "points" => $points
+      "points" => $points,
     );
     break;
 
@@ -62,7 +49,6 @@ switch($message) {
    
     $comp = array(
       "message" => $message,
-      "devMode" => $devMode,
       "examId" => $examId,
       "questionID" => $questionID,
       "comments" => $comments,
@@ -82,7 +68,6 @@ switch($message) {
     
     $comp = array(
       "message" => $message,
-      "devMode" => $devMode,
       "examId" => $examId,
       "questionID" => $questionID,
       "code" => $code,
@@ -95,7 +80,6 @@ switch($message) {
   
     $comp = array(
       "message" => $message,
-      "devMode" => $devMode,
       "examId" => $examId
     );
     break;
@@ -105,7 +89,6 @@ switch($message) {
   
     $comp = array(
       "message" => $message,
-      "devMode" => $devMode,
       "examId" => $examId
     );
     break;
@@ -115,7 +98,6 @@ switch($message) {
   
     $comp = array(
       "message" => $message,
-      "devMode" => $devMode,
       "id" => $id
     );
     break;
@@ -125,8 +107,7 @@ switch($message) {
     
     $comp = array(
       "message" => $message,
-      "devMode" => $devMode,
-      "examId" => $examId
+      "examId" => $examId 
     );
     break;
   
@@ -134,20 +115,13 @@ switch($message) {
     echo "defaulted case";
 }
 
-//$comp = array("message" => "Login","devMode" => "true");
-//$comp = array("message" => "GetQuestions","devMode" => "true");
-//$comp = array("message" => "GetQuestions");
-//$comp = array("message" => "Login","username" => "ndl25","password" => "12345");
-
-//*****set up cURL transfer to middle (controller)*****
+//------------CURL Request to Mid--------------------------------------------
 
 $ch = curl_init("https://web.njit.edu/~pm458/cs490/back/logic.php");
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $comp);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-//*****Get JSON response and transfer to user*****
 
 $response = curl_exec($ch);
 curl_close($ch);

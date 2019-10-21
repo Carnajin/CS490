@@ -75,20 +75,20 @@
     
     function buildExam(jsonObj){
       var i, j = 1, x = "", pts = "", desc = "", qid = "";
-      questionID = [];
+      question = [];
       points = [];
       for(i=0; i<jsonObj.length;i++){
       
       pts = jsonObj[i].points;
       desc = jsonObj[i].description;
-      qid = jsonObj[i].questionID;
+      qid = jsonObj[i].question;
       
         x += '<h4>Question ' + j + ', ' + pts + ' Points:</h4>' + desc + '<h4>Answer:</h4><textarea name="codes[]" rows="10" cols="60"></textarea>';
-        questionID.push(qid);
+        question.push(qid);
         points.push(pts);
         j++;
       }
-      console.log(questionID);
+      console.log(question);
       document.getElementById("insert1").innerHTML = '<fieldset id="examField"><legend><b>' + gexname + ' Exam</b></legend>' + x + '<br><br><button id="btn3" type="button">Submit</button></fieldset>';
       var btn3 = document.getElementById("btn3");
       btn3.addEventListener("click", takeExam);
@@ -162,19 +162,18 @@
       
       console.log(message);
       formElement.append("message", message);
-      formElement.append("devMode", "false");
       
       if(message == "TakeExam"){
         var i, code = [];
         var codes = document.getElementsByName('codes[]');
-        for(i=0; i<questionID.length; i++){
+        for(i=0; i<question.length; i++){
           code.push(codes[i].value + ";");
         }
-        console.log(questionID);
+        console.log(question);
         console.log(code);
         console.log(points);
         formElement.append("examId", gexid);
-        formElement.append("questionID", questionID);
+        formElement.append("question", question);
         formElement.append("points", points);
         formElement.append("code", code);
       }

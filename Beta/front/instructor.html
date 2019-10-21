@@ -174,15 +174,15 @@
         exid = jsonObj[i].examName;
         rel = jsonObj[i].releaseStatus;
         if(rel == "2"){
-          x += '<br>Exam Released: ' + exid;
+          x += '<br>Released: ' + exid;
         } else if(rel == "0"){
-          z += '<br>Exam Not Taken: ' + exid;
+          z += '<br>Pending: ' + exid;
         } else{
-          y += '<br><button  type="button" onclick="previewExam(\'' + exid + '\')">View</button> ' + exid;
+          y += '<br><button  type="button" onclick="previewExam(\'' + exid + '\')">Open</button> ' + exid;
         }
       }
       document.getElementById("insert2").innerHTML = '';
-      document.getElementById("insert1").innerHTML = '<h3>Get an Exam:</h3>' + y + x + z;
+      document.getElementById("insert1").innerHTML = '<h3>Available Exams:</h3>' + y + x + z;
     }
     
     function previewExam(exid){
