@@ -37,17 +37,19 @@
     
     <html>
     <body>
-            <h1>CS490 - Online Exam Builder.</h1>
-            <h2>Beta: Version 1</h2>
-    <br>
-    <br>
-        
+    <link href="login.css" type="text/css" rel="stylesheet" />
     <form>
-    
+        <div class="login-box">
+        <h1>CS490 - Online Exam Builder - Beta</h1>
+        <div class="textbox">
         <input type="text" name="ucid" placeholder="UCID..."/>
+        </div>
+        <div class="textbox">
         <input type="password" name="pass" placeholder="Password..."/>
+        </div>
         <br><br>
-        <button type="button" id="submit">Login</button>
+        <input class="btn" type="button" name="" id="submit" value="Login">
+    
         <p id="response" style="color:blue"></p>
     
         <script>

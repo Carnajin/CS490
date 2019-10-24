@@ -2,88 +2,68 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Instructor Portal</title>
-    <style>
-    table, th, td {
-      border: 1px solid black;
-    }
-    div {
-      height: 100%;
-      width: 50%;
-      border-left: 4px solid black;
-    }
-    .split {
-      height: 100%;
-      width: 49%;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      overflow-x: hidden;
-      padding-top: 20px;
-      padding-left: 5px;
-    }
-    
-    .left {
-      left: 0;
-    }
-    
-    .right {
-      right: 0;
-    }
-    </style>
+    <title>CS490 - Instructor Landing Page</title>
+    <link href="styles.css" type="text/css" rel="stylesheet" /> 
   </head>
   <body>
-    <form id="masterForm">
+    <form id="index">
+        <header>
+            <nav>
+              <h1>This is the INSTRUCTOR landing page.</h1>
+              <ul>
+              <li><button id="button1" type="button">Create Question</button></li>
+              <li><button id="button2" type="button">Create Exam</button></li>
+              <li><button id="button3" type="button">Get Exam</button></li>
+              <li><button id="button4" type="button">Logout</button></li>
+              </ul>
+            </nav>
+          </header>
       <div class="split left">
-      <h1>This is the INSTRUCTOR landing page.</h1>
-      <h2>Available Actions:</h2>
-        <button id="btn0" type="button">Create Exam</button>
-        <button id="btn1" type="button">Create Question</button>
-        <button id="btn2" type="button">Get Exam</button>
-        <button id="btnLogout" type="button">Logout</button>
-        <fieldset>Work Area:<p id="insert1"></p></fieldset>
-        <fieldset>Response Field:<p id="insert2"></p></fieldset>
+      <br>
+        <fieldset><p id="work_area"></p></fieldset><br><br>
+        <fieldset><p id="response_area"></p></fieldset><br><br>
       </div>
     </form>
+
     <div class="split right">
-      <h2>Question Bank:</h2>
-      Difficulty: <select id="sortDiff" name="sortDiff">
-        <option value="none">none</option>
+      <h3>Question Bank:</h3>
+      <nav>
+      <h3 class="sort_bar">Difficulty: <select id="sort_diff" name="sort_diff">
+        <option value="all"></option>
         <option value="easy">easy</option>
         <option value="medium">medium</option>
         <option value="hard">hard</option>
       </select>
-      Topic: <select id="sortType" name="sortType">
-        <option value="none">none</option>
+      Topic: <select id="sort_topic" name="sort_topic">
+        <option value="all"></option>
         <option value="if">if</option>
         <option value="loop">loop</option>
         <option value="arithmatic">arithmatic</option>
-        <option value="lists">lists</option>
-        <option value="strings">strings</option>
       </select>
-      Keyword: <input type="text" id="sortKey" name="sortKey">
-      <button id="btnSort" type="button">Sort</button>
-      <p id="insert3"></p>
+      Keyword: <input type="text" id="sort_keyword" name="sort_keyword">
+      <button id="button5" type="button">Sort</button></h3>
+      <p id="insertQuestion"></p>
+      </nav>
     </div>
   </body>
   <script type="text/javascript">
   
 //EL---------------------Event Listeners----------------------------------
-    
-    var btn0 = document.getElementById("btn0");
-    btn0.addEventListener("click", createExam);
      
-    var btn1 = document.getElementById("btn1");
-    btn1.addEventListener("click", createQuestion);
+    var button1 = document.getElementById("button1");
+    button1.addEventListener("click", createQuestion);
+
+    var button2 = document.getElementById("button2");
+    button2.addEventListener("click", createExam);
      
-    var btn2 = document.getElementById("btn2");
-    btn2.addEventListener("click", showExams);
+    var button3 = document.getElementById("button3");
+    button3.addEventListener("click", showExams);
     
-    var btnLogout = document.getElementById("btnLogout");
-    btnLogout.addEventListener("click", logout);
+    var button4 = document.getElementById("button4");
+    button4.addEventListener("click", logout);
     
-    var btnSort = document.getElementById("btnSort");
-    btnSort.addEventListener("click", getQuestions);
+    var button5 = document.getElementById("button5");
+    button5.addEventListener("click", showQuestions);
     
 //GV---------------------Global Variables----------------------------------
     
@@ -96,157 +76,159 @@
       window.location.href = "index.html";
     }
     
+//CBF---------------------Call Back Function----------------------------------
+    
+function setResp(jsonData){
+      if(jsonData.response){
+        document.getElementById("response_area").innerHTML = jsonData.response;
+      }
+      else{
+        document.getElementById("response_area").innerHTML = jsonData;
+      }
+    }
 //CEF--------------------Create Exam Function----------------------------------
     
-    function createExam(){
-      console.log("Create Exam");
-      document.getElementById("insert2").innerHTML = '';
-      document.getElementById("insert1").innerHTML = '\
-        <h3>Create an Exam:</h3>\
-        <label>Enter Exam Name:</label>\
-        <input type="text" name="examName"><br><br>\
-        <label>Select Questions from the Question Bank and Add Points</label>\
-        <p>Total Points: <label id="totalPoints"></label></p>\
-        <button id="btn5" type="button">Submit</button>';
+function createExam(){
+  document.getElementById("response_area").innerHTML = '';
+  document.getElementById("work_area").innerHTML = '\
+    <h3>Create Exam:</h3>\
+    <label>Exam Name:</label>\
+    <input type="text" name="examName">\
+    <p>Total Points: <label id="totalPoints"></label></p>\
+    <button id="button6" type="button">Submit</button>';
       
-      var btn5 = document.getElementById("btn5");
-      btn5.addEventListener("click", function() {message = "CreateExam"; submit(setResp);});
+      var button6 = document.getElementById("button6");
+      button6.addEventListener("click", function() {message = "CreateExam"; submit(setResp);});
     };
     
 //CQF--------------------Create Question Function-----------------------------
     
     function createQuestion(){
       console.log("Create Question");
-      document.getElementById("insert2").innerHTML = '';
-      document.getElementById("insert1").innerHTML = '\
-        <h3>Create a Question:</h3>\
-        <label>Function Name:</label>\
-        <input type="text" name="question">\
-        <br>\
-        <label>Description:</label>\
-        <br>\
-        <textarea name="description" rows="10" cols="58"></textarea>\
-        <br>\
-        <label>Difficulty:</label>\
-        <select name="difficulty">\
+      document.getElementById("response_area").innerHTML = '';
+      document.getElementById("work_area").innerHTML = '\
+        <h3>Create a Question:</h3> <label>Function Name:</label><input type="text" name="question">\
+        <br><label>Description:</label><br><textarea name="description" rows="10" cols="58"></textarea>\
+        <br><label>Difficulty:</label><select name="difficulty">\
           <option value="easy">easy</option>\
           <option value="medium">medium</option>\
           <option value="hard">hard</option>\
-        </select>\
-        <label>Topic:</label>\
-        <select name="topic">\
+        </select><label>Topic:</label><select name="topic">\
           <option value="if">if</option>\
           <option value="loop">loop</option>\
           <option value="arithmetic">arithmetic</option>\
-          <option value="lists">lists</option>\
-          <option value="strings">strings</option>\
-        </select>\
-        <br>\
-        <label>Test Case 1:</label>\
-        <input type="text" name="tcs1">\
-        <br>\
-        <label>Test Case 2:</label>\
-        <input type="text" name="tcs2">\
-        <br>\
-        <button id="btn6" type="button">Submit</button>';
+        </select><br><label>Test Case 1:</label><input type="text" name="tcs1">\
+        <label>Test Case 1 Result:</label><input type="text" name="tcsr1"><br>\
+        <label>Test Case 2:</label><input type="text" name="tcs2">\
+        <label>Test Case 2 Result:</label><input type="text" name="tcsr2"><br>\
+        <button id="button7" type="button">Submit</button>';
       
-      var btn6 = document.getElementById("btn6");
-      btn6.addEventListener("click", function() {message = "CreateQuestion"; submit(updateQB);});
+      var button7 = document.getElementById("button7");
+      button7.addEventListener("click", function() {message = "CreateQuestion"; submit(updateQB);});
     };
     
-    function updateQB(jsonObj){
-      console.log("submit")
-      document.getElementById("insert2").innerHTML = jsonObj.response;
-      getQuestions();
+    function updateQB(jsonData){
+      console.log("submit");
+      document.getElementById("response_area").innerHTML = jsonData.response;
+      showQuestions();
     }
     
 //SBE--------------------Show / Build Exams----------------------------------
     
     function showExams(){
-      console.log("Get Exam");
       message = "GetExam";
       submit(getExam);
     }
     
-    function getExam(jsonObj){
-      var i, x = "", y = "", z = "", exid = "", rel = "";
-      for(i=0; i<jsonObj.length; i++){
-        exid = jsonObj[i].examName;
-        rel = jsonObj[i].releaseStatus;
-        if(rel == "2"){
-          x += '<br>Released: ' + exid;
-        } else if(rel == "0"){
-          z += '<br>Pending: ' + exid;
+    function getExam(jsonData){
+      var i, released = "", review = "", pending = "", examid = "", status = "";
+      for(i=0; i<jsonData.length; i++){
+        examid = jsonData[i].examName;
+        status = jsonData[i].releaseStatus;
+        if(status == "2"){
+          released += '<br>Released: ' + examid;
+        } else if(status == "0"){
+          pending += '<br>Pending Student Action: ' + examid;
         } else{
-          y += '<br><button  type="button" onclick="previewExam(\'' + exid + '\')">Open</button> ' + exid;
+          review += '<br>Needs Instructor Review: '+ examid + ' <button  type="button" onclick="previewExam(\'' + examid + '\')"> Open</button> ';
         }
       }
-      document.getElementById("insert2").innerHTML = '';
-      document.getElementById("insert1").innerHTML = '<h3>Available Exams:</h3>' + y + x + z;
+      document.getElementById("response_area").innerHTML = '';
+      document.getElementById("work_area").innerHTML = '<h3>Available Exams:</h3>' + review + released + pending;
     }
     
-    function previewExam(exid){
-      gexid = exid;
+    function previewExam(examid){
+      gexid = examid;
       message = "StudentViewExam";
       submit(buildExam);
     }
     
-    function buildExam(jsonObj){
-      console.log("submit");
-      var i, j = 1, w = "", x = "", fn = "", tp = "", desc = "", cd = "", gd = "", ptt = "", comm = "", tgd = "";
+    function buildExam(jsonData){
+      var i, qnum = 1, agdata = "", exdata="", fun = "", rtn = "", tp = "", desc = "", cd = "", grd = "", ptt = "", comm = "", tgd = "";
       gqid = [];
-      for(i=0; i<jsonObj.length; i++){
+      for(i=0; i<jsonData.length; i++){
         
-        qid = jsonObj[i].questionID;
-        fn2 = jsonObj[i].question;
-        tp = jsonObj[i].topic;
-        desc = jsonObj[i].description;
-        cd = jsonObj[i].code;
-        gd = jsonObj[i].grade;
-        ptt = jsonObj[i].points;
-        comm = jsonObj[i].comments;
-        lp = jsonObj[i].loop;
-        rt = jsonObj[i].returna;
-        fn = jsonObj[i].funcName;
-        ex = jsonObj[i].extra;
+        qid = jsonData[i].questionID;
+        fn2 = jsonData[i].question;
+        tp = jsonData[i].topic;
+        desc = jsonData[i].description;
+        cd = jsonData[i].code;
+        grd = jsonData[i].grade;
+        ptt = jsonData[i].points;
+        comm = jsonData[i].comments;
+        fun = jsonData[i].error1;
+        rtn = jsonData[i].error2;
         gqid.push(qid);
-        w = '<table><tr><th>Test Cases</th></tr>';
+
+        agdata = '<table><tr><th>Test Cases</th></tr>';
         
-        if(lp != "0"){
-          w += '<tr><td>Does not contain for loop: -<input id=\'lp' + i + '\' value=\'' + lp + '\' oninput="tgdcalc(' + i + ', ' + ptt + ')"></td></tr>';
+        if(rtn != "0"){
+          agdata += '<tr><td>No return statement: -\
+                     <input id=\'rtn' + i + '\' value=\'' + rtn + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td></tr>';
         }
-        if(rt != "0"){
-          w += '<tr><td>Does not use return statement: -<input id=\'rt' + i + '\' value=\'' + rt + '\' oninput="tgdcalc(' + i + ', ' + ptt + ')"></td></tr>';
-        }
-        if(fn != "0"){
-          w += '<tr><td>Incorrect function name: -<input id=\'fn' + i + '\' value=\'' + fn + '\' oninput="tgdcalc(' + i + ', ' + ptt + ')"></td></tr>';
-        }
-        if(ex != "0"){
-          w += '<tr><td>Extra reductions: -<input id=\'ex' + i + '\' value=\'' + ex + '\' oninput="tgdcalc(' + i + ', ' + ptt + ')"></td></tr>';
+        if(fun != "0"){
+          agdata += '<tr><td>Incorrect function name: -\
+                     <input id=\'fun' + i + '\' value=\'' + fun + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td></tr>';
         }
         
-        w += '</table>';
-        x += '<h3>Question ' + j + ':</h3><b>Function Name: </b>' + fn2 + '<b>  Topic: </b>' + tp + '<br><br>' + desc + '<h4>Answer:</h4><textarea rows="5" cols="30" disabled="true">' + cd + '</textarea><h4>Auto Grader Results:</h4>' + (w == "<table><tr><th>Test Case</th></tr></table>" ? "No Reductions" : w) + '<br><br>Grade: <input type="text" name="gd[]"> / ' + ptt + '<h4>Add Comments:</h4><textarea name="comm[]" rows="5" cols="30" value=' + comm + '></textarea>';
-        j++;
+        agdata += '</table>';
+        exdata += '<h3>Question ' + qnum + ':</h3><b>Function Name: </b>' + fn2 + '<b>\
+                   Topic: </b>' + tp + '<br><br>' + desc + '<h4>Answer:</h4>\
+                   <textarea rows="5" cols="30" disabled="true">' + cd + '</textarea><h4>\
+                   Auto Grader Results:</h4>' + (agdata == "<table><tr><th>\
+                   Test Case</th></tr></table>" ? "No Reductions" : agdata) + '<br><br>\
+                   Grade: <input type="text" name="grd[]"> / ' + ptt + '<h4>Add Comments:</h4>\
+                   <textarea name="comm[]" rows="5" cols="30" value=' + comm + '></textarea>';
+        qnum++;
       }
-      document.getElementById("insert2").innerHTML = '<h2>' + gexid + ' Exam:<h2>' + x + '<br><br><button id="btn8" type="button">Release Exam</button>';
-      for(i=0; i<jsonObj.length; i++){
-        tgdcalc(i, ptt);
+      document.getElementById("response_area").innerHTML = '<h3>' + gexid + ' Exam:<h3>' + exdata + '<br><br><button id="button8" type="button">Release Exam</button>';
+      for(i=0; i<jsonData.length; i++){
+        totalCalc(i, ptt);
       }
-      var btn8 = document.getElementById("btn8");
-      btn8.addEventListener("click", releaseExam);
+      var button8 = document.getElementById("button8");
+      button8.addEventListener("click", releaseExam);
     }
-    
-    function tgdcalc(i, ptt){
+//CALC-------------------Calculate Question Worth - Auto Grade Deducations------
+    function totalCalc(i, ptt){
       var total = ptt;
-      if(document.getElementById('lp' + i)){total -= document.getElementById('lp' + i).value;}
-      if(document.getElementById('rt' + i)){total -= document.getElementById('rt' + i).value;}
-      if(document.getElementById('fn' + i)){total -= document.getElementById('fn' + i).value;}
-      if(document.getElementById('ex' + i)){total -= document.getElementById('ex' + i).value;}
-      
-      document.getElementsByName('gd[]')[i].value = total;
+
+      if(document.getElementById('rtn' + i)){total -= document.getElementById('rtn' + i).value;}
+      if(document.getElementById('fun' + i)){total -= document.getElementById('fun' + i).value;} 
+      document.getElementsByName('grd[]')[i].value = total;
     }
-    
+
+    function totalPoints(){
+      var i, points = 0;
+      var pt = document.getElementsByName('pts[]');
+
+      for(i=0; i<pt.length;i++){
+        points += Number(pt[i].value);
+      }
+      document.getElementById("totalPoints").innerHTML = points;
+    }
+//REL--------------------Release Exam-------------------------------------------   
     function releaseExam(){
       console.log("Release Exam");
       message = "ReleaseExam";
@@ -255,131 +237,107 @@
     
 //QBF--------------------Question Bank Function----------------------------------
     
-    function getQuestions(){
+    function showQuestions(){
       message = "GetQuestions";
       submit(buildQB);
     };
     
-    function buildQB(jsonObj){
-      var sortType = document.getElementById("sortType").value;
-      var sortDiff = document.getElementById("sortDiff").value;
-      var sortKey = document.getElementById("sortKey").value;
-      var i, x = "", qid = "", desc = "", qtype = "", fname = "", tc1 = "", tc2 = "";
-      for(i=0; i<jsonObj.length; i++){
+    function buildQB(jsonData){
+      var i, qbdata = "", qid = "", desc = "", qtype = "", fname = "", tc1 = "", tc2 = "",
+          tcr1 = "", tcr2 = "";
+      var sort_topic = document.getElementById("sort_topic").value;
+      var sort_diff = document.getElementById("sort_diff").value;
+      var sort_keyword = document.getElementById("sort_keyword").value;
+
+      for(i=0; i<jsonData.length; i++){ 
+        qid = jsonData[i].questionID;
+        fname = jsonData[i].question;
+        desc = jsonData[i].description;
+        qtype = jsonData[i].topic;
+        diff = jsonData[i].difficulty;
+        tc1 = jsonData[i].testCase1;
+        tc2 = jsonData[i].testCase2;
+        tcr1 = jsonData[i].testCaseResult1;
+        tcr2 = jsonData[i].testCaseResult2;
         
-        fname = jsonObj[i].question;
-        qid = jsonObj[i].questionID;
-        desc = jsonObj[i].description;
-        qtype = jsonObj[i].topic;
-        diff = jsonObj[i].difficulty;
-        tc1 = jsonObj[i].testCase1;
-        tc2 = jsonObj[i].testCase2;
-        
-        if((sortDiff == diff || sortDiff == "none") && (qtype.includes(sortType) || sortType == "none") && (desc.includes(sortKey) || sortKey == "")){
-          x += '<fieldset id="q' + i + '"><button type="button" onclick="addQuestion(q' + i + ')">Add</button><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br><b> Test Case 1: </b>' + tc1 + ' || <b> Test Case 2: </b>' + tc2 + '<input type="text" name="qid[]" value=' + qid + ' hidden><br><b>Points: </b><input type="number" name="pts[]" oninput="totalPoints()"><br>' + '<b>Difficulty: </b>' + diff + '<br><b>Description: </b>' + desc + '<br><br></fieldset>';
+        if((sort_diff == diff || sort_diff == "all") && (qtype.includes(sort_topic) || sort_topic == "all") 
+        && (desc.includes(sort_keyword) || sort_keyword == "")){
+           qbdata += '<fieldset id="question' + i + '"><button type="button" onclick="addQuestion(question' + i + ')">\
+           Add</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br><b>\
+           Test Case 1: </b>' + tc1 + ' || <b> Test Case 1 Output: </b>' + tcr1 + '<input type="text"\
+           name="qid[]" value=' + qid + ' hidden><br><b> Test Case 2: </b>' + tc2 + ' || <b>\
+           Test Case 2 Output: </b>' + tcr2 + '<br><b>Points: </b><input type="number" name="pts[]"\
+           oninput="totalPoints()"><br>' + '<b>Difficulty: </b>' + diff + '<br><b>Description: </b>' + desc + '<br><br></fieldset>';
         }
       }
-      document.getElementById("insert3").innerHTML = x;
+      document.getElementById("insertQuestion").innerHTML = qbdata;
     }
     
     function addQuestion(field){
       field.removeChild(field.childNodes[0]);
-      document.getElementById("insert1").appendChild(field);
-    }
-    
-    function totalPoints(){
-      var i, x = 0;
-      var pt = document.getElementsByName('pts[]');
-      for(i=0; i<pt.length;i++){
-        x += Number(pt[i].value);
-      }
-      document.getElementById("totalPoints").innerHTML = x;
-    }
-    
-//CBF---------------------Call Back Function----------------------------------
-    
-    function setResp(jsonObj){
-      if(jsonObj.response){
-        document.getElementById("insert2").innerHTML = jsonObj.response;
-      }
-      else{
-        document.getElementById("insert2").innerHTML = jsonObj;
-      }
-    }
-    
+      document.getElementById("work_area").appendChild(field);
+    }    
+        
 //ADF--------------------AJAX Driver Function----------------------------------
     
     function submit(cFunction){
-      var formElement = new FormData(document.querySelector("form"));
-      
+      var formData = new FormData(document.querySelector("form"));
       console.log(message);
-      formElement.append("message", message);
-      formElement.append("devMode", "false");
+      formData.append("message", message);
       
       if(message == "CreateExam"){
-        var qid = document.getElementById("masterForm").elements.namedItem("qid[]");
-        var pts = document.getElementById("masterForm").elements.namedItem("pts[]");
-        console.log(qid);
         var questionID = [], points = [];
+        var qid = document.getElementById("index").elements.namedItem("qid[]");
+        var pts = document.getElementById("index").elements.namedItem("pts[]");
+
         for(var i=0; i<qid.length; i++){
           questionID.push(qid[i].value);
           points.push(pts[i].value);
         }
-        formElement.append("questionID", questionID);
-        formElement.append("points", points);
-      }
-      
-      if(message == "CreateQuestion"){
-        console.log("Creating Question...");
-      }
-      
-      
-      if(message == "StudentViewExam"){
-        console.log(gexid);
-        formElement.append("examId", gexid);
+        formData.append("questionID", questionID);
+        formData.append("points", points);
       }
       
       if(message == "ReleaseExam"){
-        var gd = document.getElementsByName("gd[]");
+        var grade = [], comments = [], rtn = [], fun = [];
+        var grd = document.getElementsByName("grd[]");
         var comm = document.getElementsByName("comm[]");
-        var grade = [], comments = [], lp = [], rt = [], fn = [], ex = [];
-        for(var i=0; i<gd.length; i++){
-          if(document.getElementById('lp' + i)){lp.push(document.getElementById('lp' + i).value);} else{lp.push(0);}
-          if(document.getElementById('rt' + i)){rt.push(document.getElementById('rt' + i).value);} else{rt.push(0);}
-          if(document.getElementById('fn' + i)){fn.push(document.getElementById('fn' + i).value);} else{fn.push(0);}
-          if(document.getElementById('ex' + i)){ex.push(document.getElementById('ex' + i).value);} else{ex.push(0);}
-          grade.push(gd[i].value);
+
+        for(var i=0; i<grd.length; i++){
+          if(document.getElementById('rtn' + i)){rtn.push(document.getElementById('rtn' + i).value);} else{rtn.push(0);}
+          if(document.getElementById('fun' + i)){fun.push(document.getElementById('fun' + i).value);} else{fun.push(0);}
+
+          grade.push(grd[i].value);
           comments.push(comm[i].value);
         }
-        formElement.append("loop", lp);
-        formElement.append("return", rt);
-        formElement.append("question", fn);
-        formElement.append("extra", ex);
-        formElement.append("questionID", gqid);
-        formElement.append("examId", gexid);
-        formElement.append("grade", grade);
-        formElement.append("comments", comments);
+
+        formData.append("return", rtn);
+        formData.append("question", fun);
+        formData.append("questionID", gqid);
+        formData.append("examId", gexid);
+        formData.append("grade", grade);
+        formData.append("comments", comments);
+      }
+
+      if(message == "StudentViewExam"){
+        formData.append("examId", gexid);
       }
       
-      for(var pair of formElement.entries()){
-        console.log(pair[0]+ ', '+ pair[1]);
-      }
       var xhr = new XMLHttpRequest();
-        
       xhr.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200) {
           console.log(this.responseText);
-          jsonObj = JSON.parse(this.responseText);
-          console.log(jsonObj);
-          cFunction(jsonObj);
+          jsonData = JSON.parse(this.responseText);
+          console.log(jsonData);
+          cFunction(jsonData);
         }
       };
       
       xhr.open("POST", "curlhandler.php", true);
-      xhr.send(formElement);
+      xhr.send(formData);
       
     }
     
-    getQuestions();
+    showQuestions();
   </script>
 </html>

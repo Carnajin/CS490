@@ -1,8 +1,9 @@
 <?php
 //---------Message for cases-------------------
-$message = $_POST["message"];
+$operation = $_POST["message"];
+
 //---------Cases for sending POST data-----------------------
-switch($message) {
+switch($operation) {
   
   case "CreateExam":    
     $examName = $_POST["examName"];
@@ -10,7 +11,7 @@ switch($message) {
     $points = $_POST["points"];
     
     $data = array(
-      "message" => $message,
+      "message" => $operation,
       "examName" => $examName,
       "questionID" => $questionID,
       "points" => $points,
@@ -20,15 +21,19 @@ switch($message) {
   case "CreateQuestion":
     $testCase1 = $_POST["tcs1"];
     $testCase2 = $_POST["tcs2"];
+    $testCaseResult1 = $_POST["tcsr1"];
+    $testCaseResult2 = $_POST["tcsr2"];
     $question = $_POST["question"];
     $description = $_POST["description"];
     $difficulty = $_POST["difficulty"];
     $topic = $_POST["topic"];
     
     $data = array(
-      "message" => $message,
+      "message" => $operation,
       "tcs1" => $testCase1,
       "tcs2" => $testCase2,
+      "tcsr1" => $testCaseResult1,
+      "tcsr2" => $testCaseResult2,
       "question" => $question,
       "description" => $description,
       "difficulty" => $difficulty,
@@ -41,34 +46,32 @@ switch($message) {
     $questionID = $_POST["questionID"];
     $comments = $_POST["comments"];
     $grade = $_POST["grade"];
-    $loop = $_POST["loop"];
+    $fname = $_POST["fName"];
     $return = $_POST["return"];
-    $question = $_POST["funcName"];
-    $extra = $_POST["extra"];
    
     $data = array(
-      "message" => $message,
+      "message" => $operation,
       "examId" => $examID,
       "questionID" => $questionID,
       "comments" => $comments,
       "grade" => $grade,
-      "loop" => $loop,
-      "return" => $return,
-      "funcName" => $question,
-      "extra" => $extra
+      "fName" => $fname,
+      "return" => $return
     );
     break;
 
   case "TakeExam":
+    $examName = $_POST["examName"];
     $examID = $_POST["examId"];
-    $questionID = $_POST["questionID"];
+    $questionA = $_POST["questionA"];
     $code = $_POST["code"];
     $points = $_POST["points"];
     
     $data = array(
-      "message" => $message,
+      "message" => $operation,
+      "examName" => $examName,
       "examId" => $examID,
-      "questionID" => $questionID,
+      "questionA" => $questionA,
       "code" => $code,
       "points" => $points
     );
@@ -78,7 +81,7 @@ switch($message) {
     $examID = $_POST["examId"];
   
     $data = array(
-      "message" => $message,
+      "message" => $operation,
       "examId" => $examID
     );
     break;
@@ -87,7 +90,7 @@ switch($message) {
     $examID = $_POST["examId"];
     
     $data = array(
-      "message" => $message,
+      "message" => $operation,
       "examId" => $examID 
     );
     break;
@@ -96,7 +99,7 @@ switch($message) {
     $examId = $_POST["examId"];
   
     $data = array(
-      "message" => $message,
+      "message" => $operation,
       "examId" => $examID
     );
     break;
@@ -105,7 +108,7 @@ switch($message) {
     $id = $_POST[$id];
   
     $data = array(
-      "message" => $message,
+      "message" => $operation,
       "id" => $id
     );
     break;
@@ -116,7 +119,7 @@ switch($message) {
 
 //------------CURL Request to Mid--------------------------------------------
 
-$ch = curl_init("https://web.njit.edu/~pm458/cs490/back/logic.php");
+$ch = curl_init("https://web.njit.edu/~vnp27/cs490/mid/curlhandler.php");
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);

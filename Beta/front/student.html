@@ -3,95 +3,103 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Student Portal</title>
-    <style>
-    #examTitle{
-      text-align: center;
-    }
-    </style>
+    <title>CS490 - Student Landing Page</title>
+    <link href="styles.css" type="text/css" rel="stylesheet" />
   </head>
   <body>
-    <form id="masterForm">
+    <div class="student_area">
+    <form id="student_area">
       <h1>This is the STUDENT landing page.</h1>
-      <h2>Select an Exam:</h2>
-      <p id="insert0"></p>
-      <button id="btnLogout" type="button">Logout</button>
-      <p id="insert1"></p>
-      <p id="insert2"></p>
+      <h2>Available Exams:</h2>
+      <p id="examArea"></p>
+      <div class="logout_button">
+      <button id="button1" type="button">Logout</button>
+      </div>
+      <p id="field1"></p>
+      <p id="field2"></p>
     </form>
+    </div>
   </body>
   <script>
   
-    //***************Event Listeners***************
+//EL---------------------Event Listeners----------------------------------
     
-    var btnLogout = document.getElementById("btnLogout");
-    btnLogout.addEventListener("click", logout);
+    var button1 = document.getElementById("button1");
+    button1.addEventListener("click", logout);
     
-    //***************Globals***************
+//GV---------------------Global Variables----------------------------------
     
-    var message = "", questionID = [], points = [], gexid = "", gexname = "";
+    var message = "", getExamID = "", getExamName = "", questionID = [], points = [];
+
+//CBF---------------------Call Back Function----------------------------------
+    function setResp(jsonData){
+      var i;
+      getExams();
+      document.getElementById("populate_exam").disabled = true;
+      document.getElementById("field2").innerHTML = jsonData.response;
+    }
     
-    //***************Logout***************
+//LF---------------------Logout Function----------------------------------
     
     function logout(){
       window.location.href = "index.html";
     }
     
-    //***************Get/Take***************
-    
     function getExams(){
       message = "GetExam";
-      submit(actionVT);
+      submit(studentAction);
     }
     
-    function actionVT(jsonObj){
-      var i, x = "", y = "", z = "", exname = "", exid = "", rel = "";
-      for(i=0; i<jsonObj.length; i++){
-        exid = jsonObj[i].examID;
-        exname = jsonObj[i].examName;
-        rel = jsonObj[i].releaseStatus;
+    function studentAction(jsonData){
+      var i, eList = "", eTake = "", eResults = "", eName = "", eID = "", rel = "";
+      for(i=0; i<jsonData.length; i++){
+        eID = jsonData[i].examID;
+        eName = jsonData[i].examName;
+        rel = jsonData[i].releaseStatus;
+
         if(rel == "2"){
-          x += '<br><button type="button" onclick="studentViewExam(\'' + exid + '\',\'' + exname + '\')">View</button> ' + exname;
+          eList += '<br><button type="button" onclick="studentResults(\'' + eID + '\',\'' + eName + '\')">View</button> ' + eName;
         } else if(rel == "0"){
-          y += '<br><button type="button" onclick="getExam(\'' + exid + '\',\'' + exname + '\')">Take</button> ' + exname;
+          eTake += '<br><button type="button" onclick="getExam(\'' + eID + '\',\'' + eName + '\')">Take</button> ' + eName;
         } else{
-          z += '<br>Results not Posted For: ' + exname;
+          eResults += '<br>Results not Posted For: ' + eName;
         }
       }
-      document.getElementById("insert0").innerHTML = x + y + z;
+      document.getElementById("examArea").innerHTML = eList + eTake + eResults;
     }
-    
-    //***************Take Exam***************
-    
-    function getExam(exid, exname){
-      gexid = exid;
-      gexname = exname;
-      console.log("Get Exam to Take");
+
+    function getExam(eID, eName){
+      getExamID = eID;
+      getExamName = eName;
       message = "InstructorViewExam";
-      document.getElementById("insert1").innerHTML = '';
-      document.getElementById("insert2").innerHTML = '';
-      submit(buildExam);
+      document.getElementById("field1").innerHTML = '';
+      document.getElementById("field2").innerHTML = '';
+      submit(construct);
     }
     
-    function buildExam(jsonObj){
-      var i, j = 1, x = "", pts = "", desc = "", qid = "";
+//Ex---------------------Exam----------------------------------
+    
+    function construct(jsonData){
+      var i, qNum = 1, eData = "", pnts = "", desc = "", qid = "";
       question = [];
       points = [];
-      for(i=0; i<jsonObj.length;i++){
+      for(i=0; i<jsonData.length;i++){
       
-      pts = jsonObj[i].points;
-      desc = jsonObj[i].description;
-      qid = jsonObj[i].question;
+      pnts = jsonData[i].points;
+      desc = jsonData[i].description;
+      qid = jsonData[i].question;
       
-        x += '<h4>Question ' + j + ', ' + pts + ' Points:</h4>' + desc + '<h4>Answer:</h4><textarea name="codes[]" rows="10" cols="60"></textarea>';
+        eData += '<h4>Question ' + qNum + ', Points: ' + pnts + '<br><br>' + desc + '\
+                  <br><br><textarea name="codes[]" rows="10" cols="40" placeholder="Type code here...">\
+                  </textarea><br><hr class="qbreak">';
         question.push(qid);
-        points.push(pts);
-        j++;
+        points.push(pnts);
+        qNum++;
       }
       console.log(question);
-      document.getElementById("insert1").innerHTML = '<fieldset id="examField"><legend><b>' + gexname + ' Exam</b></legend>' + x + '<br><br><button id="btn3" type="button">Submit</button></fieldset>';
-      var btn3 = document.getElementById("btn3");
-      btn3.addEventListener("click", takeExam);
+      document.getElementById("field1").innerHTML = '<fieldset id="populate_exam"><legend><b>' + getExamName + ' Exam</b></legend>' + eData + '<br><br><button id="button2" type="button">Submit</button></fieldset>';
+      var button2 = document.getElementById("button2");
+      button2.addEventListener("click", takeExam);
     }
     
     function takeExam(){
@@ -99,60 +107,54 @@
       submit(setResp);
     };
     
-    function setResp(jsonObj){
-      var i;
-      getExams();
-      document.getElementById("examField").disabled = true;
-      document.getElementById("insert2").innerHTML = jsonObj.response;
-    }
-    
     //***************View Exam Results***************
     
-    function studentViewExam(exid, exname){
-      gexid = exid;
-      gexname = exname;
-      console.log("View Exam Results");
+    function studentResults(eID, eName){
+      getExamID = eID;
+      getExamName = eName;
       message = "StudentViewExam";
-      document.getElementById("insert1").innerHTML = '';
-      document.getElementById("insert2").innerHTML = '';
+      document.getElementById("field1").innerHTML = '';
+      document.getElementById("field2").innerHTML = '';
       submit(buildExamView);
     };
     
-    function buildExamView(jsonObj){
-      var i, j = 1, k, w = "", x = "", y = 0, z = 0, desc = "", cd = "", gd = "", pt = "", comm = "", rd = "", func = "";
-      for(i = 0; i<jsonObj.length; i++){
+    function buildExamView(jsonData){
+      var i, qNum = 1, tcData = "", eData = "", eGrade = 0, ePoints = 0, 
+      code = "", grde = "", pnts = "", comm = "", rtn = "", func = "", desc = "";
+
+      for(i = 0; i<jsonData.length; i++){
       
-        desc = jsonObj[i].description;
-        cd = jsonObj[i].code;
-        gd = jsonObj[i].grade;
-        pt = jsonObj[i].points;
-        comm = jsonObj[i].comments;
-        lp = jsonObj[i].loop;
-        rt = jsonObj[i].returna;
-        fn = jsonObj[i].funcName;
-        ex = jsonObj[i].extra;
-        w = '<table><tr><th>Test Cases</th></tr>';
+        desc = jsonData[i].description;
+        code = jsonData[i].code;
+        grde = jsonData[i].grade;
+        pnts = jsonData[i].points;
+        comm = jsonData[i].comments;
+        rtn = jsonData[i].returna;
+        fun = jsonData[i].funcName;
+
+        tcData = '<table><tr><th>Test Cases</th></tr>';
         
-        if(lp != "0"){
-          w += '<tr><td>No for loop: -' + lp;
-        }
-        if(rt != "0"){
-          w += '<tr><td>No return statement: -' + rt;
-        }
-        if(fn != "0"){
-          w += '<tr><td>Invalid function name: -' + fn;
-        }
-        if(ex != "0"){
-          w += '<tr><td>Other reductions(see feedback): -' + ex;
-        }
+        if(fun != "0"){
+          tcData += '<tr><td>Invalid function name: -' + fun;
+          }
+
+        if(rtn != "0"){
+          tcData += '<tr><td>No return statement: -' + rtn;
+          }
         
-        w += '</table>';
-        x += '<fieldset><h3>Question ' + j + ':</h3>' + desc + '<h4>Answer:</h4><textarea rows="5" cols="30" disabled="true">' + cd + '</textarea><h4>Auto Grader Results:</h4>' + (w == '<table><tr><th>Test Cases</th></tr></table>' ? "No Reductions" : w) + '<br><br>Grade: ' + gd + '/' + pt + '<h4>Comments:</h4>' + comm + '</fieldset>';
-        y += Number(gd);
-        z += Number(pt);
-        j++;
+        tcData += '</table>';
+        eData += '<fieldset><h3>Question ' + qNum + ':</h3>' + desc + '<h4>Answer:</h4>\
+              <textarea rows="5" cols="30" disabled="true">' + code + '</textarea>\
+              <h4>Auto Grader Results:</h4>' + (tcData == '<table><tr><th>Test Cases</th></tr>\
+              </table>' ? "No Reductions" : tcData) + '<br><br>Grade: ' + grde + '/' + pnts + '\
+              <h4>Comments:</h4>' + comm + '</fieldset>';
+        eGrade += Number(grde);
+        ePoints += Number(pnts);
+        qNum++;
       }
-      document.getElementById("insert1").innerHTML = '<fieldset id="examTitle"><h2>' + gexname + ' Exam<h2></fieldset>' + x + '<fieldset><h2>Final Grade: ' + y + '/' + z + '</h2></fieldset>';
+      document.getElementById("field1").innerHTML = '<fieldset id="examTitle">\
+               <h2>' + getExamName + ' Exam<h2></fieldset>' + eData + '<fieldset>\
+               <h2>Final Grade: ' + eGrade + '/' + ePoints + '</h2></fieldset>';
     }
     
     //***************AJAX and FormData***************
@@ -169,21 +171,19 @@
         for(i=0; i<question.length; i++){
           code.push(codes[i].value + ";");
         }
-        console.log(question);
-        console.log(code);
-        console.log(points);
-        formElement.append("examId", gexid);
-        formElement.append("question", question);
+        formElement.append("examName", getExamName);
+        formElement.append("examId", getExamID);
+        formElement.append("questionA", question);
         formElement.append("points", points);
         formElement.append("code", code);
       }
       
       if(message == "StudentViewExam"){
-        formElement.append("examId", gexname);
+        formElement.append("examId", getExamName);
       }
       
       if(message == "InstructorViewExam"){
-        formElement.append("examId", gexid);
+        formElement.append("examId", getExamID);
       }
       
       for(var pair of formElement.entries()){
@@ -195,9 +195,9 @@
       xhr.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200) {
           console.log(this.responseText);
-          jsonObj = JSON.parse(this.responseText);
-          console.log(jsonObj);
-          cFunction(jsonObj);
+          jsonData = JSON.parse(this.responseText);
+          console.log(jsonData);
+          cFunction(jsonData);
         }
       };
       
