@@ -1,0 +1,62 @@
+<script>
+        function ajax(){
+            var fields = document.querySelector("form");
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() { 
+                if (this.readyState == 4 && this.status == 200) {
+//-- Used to search for the boolean response -----------------------------------
+                    statusCode = JSON.parse(this.responseText);
+                    var respBack = Number(statusCode.back);
+                    var respRole = Number(statusCode.role);
+//------------------------------------------------------------------------------   
+                    document.getElementById("response").innerHTML = this.responseText;
+    
+//-- Response conditions -------------------------------------------------------
+                    if (respBack == 1){
+                        if (respRole == "1"){
+                            window.location.href = "instructor.html";
+                        }
+                        else{
+                           // document.getElementById("response").innerHTML = "Welcome Student!";
+                            window.location.href = "student.html";
+                        }
+                    }
+                    else if (respBack == 0){
+                                document.getElementById("response").innerHTML = "Invalid Username / Password";
+                        } 
+//-- Check the console for status of all sent boolean values for login ---------------------                    
+                    console.log("Results for Connections:");
+                    console.log(statusCode);
+    
+                }
+            };
+            xhr.open("POST", "login.php", true); // Where to post to.
+            xhr.send(new FormData(fields)); // Send the fields of the form data
+        };
+    </script>
+    
+    <html>
+    <body>
+    <link href="login.css" type="text/css" rel="stylesheet" />
+    <form>
+        <div class="login-box">
+        <h1>CS490 - Online Exam Builder - Beta</h1>
+        <div class="textbox">
+        <input type="text" name="ucid" placeholder="UCID..."/>
+        </div>
+        <div class="textbox">
+        <input type="password" name="pass" placeholder="Password..."/>
+        </div>
+        <br><br>
+        <input class="btn" type="button" name="" id="submit" value="Login">
+    
+        <p id="response" style="color:blue"></p>
+    
+        <script>
+            var submit = document.getElementById("submit");
+            submit.addEventListener("click", ajax);
+        </script>
+    
+    </form>
+    </body>
+    </html>
