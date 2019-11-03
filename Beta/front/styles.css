@@ -3,7 +3,9 @@
     box-sizing: border-box;
 }
 
-
+textarea {
+    resize: none;
+}
 
 hr.qbreak {
     border: 10px solid grey;

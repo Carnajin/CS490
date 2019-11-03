@@ -116,11 +116,31 @@ function createExam(){
         </select><label>Topic:</label><select name="topic">\
           <option value="if">if</option>\
           <option value="loop">loop</option>\
-          <option value="arithmetic">arithmetic</option>\
-        </select><br><label>Test Case 1:</label><input type="text" name="tcs1">\
-        <label>Test Case 1 Result:</label><input type="text" name="tcsr1"><br>\
-        <label>Test Case 2:</label><input type="text" name="tcs2">\
-        <label>Test Case 2 Result:</label><input type="text" name="tcsr2"><br>\
+          <option value="arithmetic">arithmetic</option></select>\
+          <br>\
+        <label for="tc1"><input type="checkbox" id="tcs1Check" onclick="EnableDisable1(this)">\
+        Test Case 1:<input type="text" name="tcs1" id="tc1" disabled="disable">\
+        Test Case 1 Result:<input type="text" name="tcsr1" id="tcr1" disabled="disable"></label><br>\
+        \
+        <label for="tc2"><input type="checkbox" id="tcs2Check"  onclick="EnableDisable2(this)">\
+        Test Case 2:</label><input type="text" name="tcs2" id="tc2" disabled="disable">\
+        Test Case 2 Result:</label><input type="text" name="tcsr2" id="tcr2" disabled="disable"></label><br>\
+        \
+        <label for="tc3"><input type="checkbox" id="tcs3Check"  onclick="EnableDisable3(this)">\
+        <label>Test Case 3:</label><input type="text" name="tcs3" id="tc3" disabled="disable">\
+        <label>Test Case 3 Result:</label><input type="text" name="tcsr3" id="tcr3" disabled="disable"><br>\
+        \
+        <label for="tc4"><input type="checkbox" id="tcs4Check"  onclick="EnableDisable4(this)">\
+        <label>Test Case 4:</label><input type="text" name="tcs4" id="tc4" disabled="disable">\
+        <label>Test Case 4 Result:</label><input type="text" name="tcsr4" id="tcr4" disabled="disable"><br>\
+        \
+        <label for="tc5"><input type="checkbox" id="tcs5Check"  onclick="EnableDisable5(this)">\
+        <label>Test Case 5:</label><input type="text" name="tcs5" id="tc5" disabled="disable">\
+        <label>Test Case 5 Result:</label><input type="text" name="tcsr5" id="tcr5" disabled="disable"><br>\
+        \
+        <label for="tc6"><input type="checkbox" id="tcs6Check"  onclick="EnableDisable6(this)">\
+        <label>Test Case 6:</label><input type="text" name="tcs6" id="tc6" disabled="disable">\
+        <label>Test Case 6 Result:</label><input type="text" name="tcsr6" id="tcr6" disabled="disable"><br>\
         <button id="button7" type="button">Submit</button>';
       
       var button7 = document.getElementById("button7");
@@ -131,6 +151,66 @@ function createExam(){
       console.log("submit");
       document.getElementById("response_area").innerHTML = jsonData.response;
       showQuestions();
+    }
+
+    function EnableDisable1(tcs1Check) {
+        var tc1 = document.getElementById("tc1");
+        var tcr1 = document.getElementById("tcr1");
+        tc1.disabled = tcs1Check.checked ? false : true;
+        tcr1.disabled = tcs1Check.checked ? false : true;
+        if (!tc1.disabled && !tcr1.disabled) {
+            tc1.focus();
+        }
+    }
+
+    function EnableDisable2(tcs2Check) {
+        var tc2 = document.getElementById("tc2");
+        var tcr2 = document.getElementById("tcr2");
+        tc2.disabled = tcs2Check.checked ? false : true;
+        tcr2.disabled = tcs2Check.checked ? false : true;
+        if (!tc2.disabled && !tcr2.disabled) {
+            tc2.focus();
+        }
+    }
+
+    function EnableDisable3(tcs3Check) {
+        var tc3 = document.getElementById("tc3");
+        var tcr3 = document.getElementById("tcr3");
+        tc3.disabled = tcs3Check.checked ? false : true;
+        tcr3.disabled = tcs3Check.checked ? false : true;
+        if (!tc3.disabled && !tcr3.disabled) {
+            tc3.focus();
+        }
+    }
+
+    function EnableDisable4(tcs4Check) {
+        var tc4 = document.getElementById("tc4");
+        var tcr4 = document.getElementById("tcr4");
+        tc4.disabled = tcs4Check.checked ? false : true;
+        tcr4.disabled = tcs4Check.checked ? false : true;
+        if (!tc4.disabled && !tcr4.disabled) {
+            tc4.focus();
+        }
+    }
+
+    function EnableDisable5(tcs5Check) {
+        var tc5 = document.getElementById("tc5");
+        var tcr5 = document.getElementById("tcr5");
+        tc5.disabled = tcs5Check.checked ? false : true;
+        tcr5.disabled = tcs5Check.checked ? false : true;
+        if (!tc5.disabled && !tcr5.disabled) {
+            tc5.focus();
+        }
+    }
+
+    function EnableDisable6(tcs6Check) {
+        var tc6 = document.getElementById("tc6");
+        var tcr6 = document.getElementById("tcr6");
+        tc6.disabled = tcs6Check.checked ? false : true;
+        tcr6.disabled = tcs6Check.checked ? false : true;
+        if (!tc6.disabled && !tcr6.disabled) {
+            tc6.focus();
+        }
     }
     
 //SBE--------------------Show / Build Exams----------------------------------
@@ -182,12 +262,12 @@ function createExam(){
 
         agdata = '<table><tr><th>Test Cases</th></tr>';
         
-        if(rtn != "0"){
+        if(rtn =button8= "0"){
           agdata += '<tr><td>No return statement: -\
                      <input id=\'rtn' + i + '\' value=\'' + rtn + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
                      </td></tr>';
         }
-        if(fun != "0"){
+        if(fun == "0"){
           agdata += '<tr><td>Incorrect function name: -\
                      <input id=\'fun' + i + '\' value=\'' + fun + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
                      </td></tr>';
@@ -196,14 +276,14 @@ function createExam(){
         agdata += '</table>';
         exdata += '<h3>Question ' + qnum + ':</h3><b>Function Name: </b>' + fn2 + '<b>\
                    Topic: </b>' + tp + '<br><br>' + desc + '<h4>Answer:</h4>\
-                   <textarea rows="5" cols="30" disabled="true">' + cd + '</textarea><h4>\
-                   Auto Grader Results:</h4>' + (agdata == "<table><tr><th>\
+                   <textarea rows="5" cols="25" disabled="true">' + cd + '</textarea>\
+                   <h3>Add Comments:</h3><textarea name="comm[]" rows="5" cols="25" value=' + comm + '></textarea>\
+                   <h3>Auto Grader Results:</h3>' + (agdata == "<table><tr><th>\
                    Test Case</th></tr></table>" ? "No Reductions" : agdata) + '<br><br>\
-                   Grade: <input type="text" name="grd[]"> / ' + ptt + '<h4>Add Comments:</h4>\
-                   <textarea name="comm[]" rows="5" cols="30" value=' + comm + '></textarea>';
+                   Grade: <input type="text" name="grd[]"> / ' + ptt + '<br><hr>';
         qnum++;
       }
-      document.getElementById("response_area").innerHTML = '<h3>' + gexid + ' Exam:<h3>' + exdata + '<br><br><button id="button8" type="button">Release Exam</button>';
+      document.getElementById("response_area").innerHTML = '<h3> Exam: ' + gexid + '<h3>' + exdata + '<br><br><button id="button8" type="button">Release Exam</button>';
       for(i=0; i<jsonData.length; i++){
         totalCalc(i, ptt);
       }
@@ -257,16 +337,29 @@ function createExam(){
         diff = jsonData[i].difficulty;
         tc1 = jsonData[i].testCase1;
         tc2 = jsonData[i].testCase2;
+        tc3 = jsonData[i].testCase3;
+        tc4 = jsonData[i].testCase4;
+        tc5 = jsonData[i].testCase5;
+        tc6 = jsonData[i].testCase6;
         tcr1 = jsonData[i].testCaseResult1;
         tcr2 = jsonData[i].testCaseResult2;
+        tcr3 = jsonData[i].testCaseResult3;
+        tcr4 = jsonData[i].testCaseResult4;
+        tcr5 = jsonData[i].testCaseResult5;
+        tcr6 = jsonData[i].testCaseResult6;
         
         if((sort_diff == diff || sort_diff == "all") && (qtype.includes(sort_topic) || sort_topic == "all") 
         && (desc.includes(sort_keyword) || sort_keyword == "")){
            qbdata += '<fieldset id="question' + i + '"><button type="button" onclick="addQuestion(question' + i + ')">\
-           Add</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br><b>\
-           Test Case 1: </b>' + tc1 + ' || <b> Test Case 1 Output: </b>' + tcr1 + '<input type="text"\
-           name="qid[]" value=' + qid + ' hidden><br><b> Test Case 2: </b>' + tc2 + ' || <b>\
-           Test Case 2 Output: </b>' + tcr2 + '<br><b>Points: </b><input type="number" name="pts[]"\
+           Add</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br>\
+           <b>Test Case 1: </b>' + tc1 + ' | <b> Test Case 1 Output: </b>' + tcr1 + '\
+           <input type="text" name="qid[]" value=' + qid + ' hidden>||\
+           <b> Test Case 2: </b>' + tc2 + ' | <b> Test Case 2 Output: </b>' + tcr2 + '<br>\
+           <b> Test Case 3: </b>' + tc3 + ' | <b> Test Case 3 Output: </b>' + tcr3 + '\
+           <b> Test Case 4: </b>' + tc4 + ' | <b> Test Case 4 Output: </b>' + tcr4 + '<br>\
+           <b> Test Case 5: </b>' + tc5 + ' | <b> Test Case 5 Output: </b>' + tcr5 + '\
+           <b> Test Case 6: </b>' + tc6 + ' | <b> Test Case 6 Output: </b>' + tcr6 + '<br>\
+           <b>Points: </b><input type="number" name="pts[]"\
            oninput="totalPoints()"><br>' + '<b>Difficulty: </b>' + diff + '<br><b>Description: </b>' + desc + '<br><br></fieldset>';
         }
       }
@@ -276,7 +369,7 @@ function createExam(){
     function addQuestion(field){
       field.removeChild(field.childNodes[0]);
       document.getElementById("work_area").appendChild(field);
-    }    
+    }     
         
 //ADF--------------------AJAX Driver Function----------------------------------
     

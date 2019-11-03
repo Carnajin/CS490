@@ -120,7 +120,7 @@
     
     function buildExamView(jsonData){
       var i, qNum = 1, tcData = "", eData = "", eGrade = 0, ePoints = 0, 
-      code = "", grde = "", pnts = "", comm = "", rtn = "", func = "", desc = "";
+      code = "", grde = "", pnts = "", comm = "", rtn = "", fun = "", desc = "";
 
       for(i = 0; i<jsonData.length; i++){
       
@@ -129,8 +129,8 @@
         grde = jsonData[i].grade;
         pnts = jsonData[i].points;
         comm = jsonData[i].comments;
-        rtn = jsonData[i].returna;
-        fun = jsonData[i].funcName;
+        rtn = jsonData[i].error2;
+        fun = jsonData[i].error1;
 
         tcData = '<table><tr><th>Test Cases</th></tr>';
         

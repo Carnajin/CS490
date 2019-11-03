@@ -21,8 +21,16 @@ switch($operation) {
   case "CreateQuestion":
     $testCase1 = $_POST["tcs1"];
     $testCase2 = $_POST["tcs2"];
+    $testCase2 = $_POST["tcs3"];
+    $testCase2 = $_POST["tcs4"];
+    $testCase2 = $_POST["tcs5"];
+    $testCase2 = $_POST["tcs6"];
     $testCaseResult1 = $_POST["tcsr1"];
     $testCaseResult2 = $_POST["tcsr2"];
+    $testCaseResult2 = $_POST["tcsr3"];
+    $testCaseResult2 = $_POST["tcsr4"];
+    $testCaseResult2 = $_POST["tcsr5"];
+    $testCaseResult2 = $_POST["tcsr6"];
     $question = $_POST["question"];
     $description = $_POST["description"];
     $difficulty = $_POST["difficulty"];
@@ -32,8 +40,16 @@ switch($operation) {
       "message" => $operation,
       "tcs1" => $testCase1,
       "tcs2" => $testCase2,
+      "tcs3" => $testCase3,
+      "tcs4" => $testCase4,
+      "tcs5" => $testCase5,
+      "tcs6" => $testCase6,
       "tcsr1" => $testCaseResult1,
       "tcsr2" => $testCaseResult2,
+      "tcsr3" => $testCaseResult3,
+      "tcsr4" => $testCaseResult4,
+      "tcsr5" => $testCaseResult5,
+      "tcsr6" => $testCaseResult6,
       "question" => $question,
       "description" => $description,
       "difficulty" => $difficulty,
