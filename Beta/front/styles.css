@@ -18,7 +18,7 @@ body {
     font-size: 1.125em;
     line-height: 1.6;
     color: black;
-    background: #c5beb0;
+    background: rgb(226, 222, 216);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -34,7 +34,7 @@ body h2 {
 
 header nav button {
     background: none;
-    color: rgb(255,255,255);
+    color: rgb(0,0,0);
     width: 120px;
     height: 40px;
     border: 1px solid #338033;
@@ -53,9 +53,9 @@ header nav button:after {
     display: block;
     position: absolute;
     background: rgba(255,255,255,.5);
-    width: 20px;
+    width: 0;
     height: 100%;
-    left: 10px;
+    left: 0;
     top: 0;
     opacity: 0;
 }
@@ -78,7 +78,7 @@ header nav li {
 
 .right button {
     background: none;
-    color: rgb(255,255,255);
+    color: rgb(0,0,0);
     width: 120px;
     height: 40px;
     border: 1px solid #338033;
@@ -111,7 +111,7 @@ header nav li {
 
 table, th, td {
     border: 2px solid black;
-    padding-bottom: 20px;
+    padding-bottom: 0;
   }
   div {
     height: 100%;
@@ -166,7 +166,7 @@ header h1 {
 
   .student_area button {
     background: none;
-    color: rgb(255,255,255);
+    color: rgb(0,0,0);
     width: 120px;
     height: 40px;
     border: 1px solid #338033;

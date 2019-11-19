@@ -10,7 +10,7 @@
     <div class="student_area">
     <form id="student_area">
       <h1>This is the STUDENT landing page.</h1>
-      <h2>Available Exams:</h2>
+      <h2></h2>
       <p id="examArea"></p>
       <div class="logout_button">
       <button id="button1" type="button">Logout</button>
@@ -29,7 +29,11 @@
     
 //GV---------------------Global Variables----------------------------------
     
-    var message = "", getExamID = "", getExamName = "", questionID = [], points = [];
+    var message = "";
+    var getExamID = "";
+    var getExamName = "";
+    var questionID = [];
+    var points = [];
 
 //CBF---------------------Call Back Function----------------------------------
     function setResp(jsonData){
@@ -49,7 +53,8 @@
       message = "GetExam";
       submit(studentAction);
     }
-    
+
+//SA ---------------------Student Action Area-------------------------------
     function studentAction(jsonData){
       var i, eList = "", eTake = "", eResults = "", eName = "", eID = "", rel = "";
       for(i=0; i<jsonData.length; i++){
@@ -58,14 +63,14 @@
         rel = jsonData[i].releaseStatus;
 
         if(rel == "2"){
-          eList += '<br><button type="button" onclick="studentResults(\'' + eID + '\',\'' + eName + '\')">View</button> ' + eName;
+          eList += '<tr><td bgcolor="00FF00">Ready for Viewing</td><td>' + eName + '</td><td><button type="button" onclick="studentResults(\'' + eID + '\',\'' + eName + '\')">View</button></td></tr>';
         } else if(rel == "0"){
-          eTake += '<br><button type="button" onclick="getExam(\'' + eID + '\',\'' + eName + '\')">Take</button> ' + eName;
+          eTake += '<tr><td bgcolor="00FFF7">Ready to Take:</td><td>' + eName + '</td><td><button type="button" onclick="getExam(\'' + eID + '\',\'' + eName + '\')">Take</button></td></tr>';
         } else{
-          eResults += '<br>Results not Posted For: ' + eName;
+          eResults += '<tr><td bgcolor="yellow">Pending Grading: </td><td>' + eName + '</td><td>None</td></tr>';
         }
       }
-      document.getElementById("examArea").innerHTML = eList + eTake + eResults;
+      document.getElementById("examArea").innerHTML = '<table style="width:80%" id="student_exam_area"><tr><th colspan="3">Available Exams:</th></tr><td>Status:</td><td>Exam:</td><td>Action:</td>' + eList + eTake + eResults +'</table></tr>';
     }
 
     function getExam(eID, eName){
@@ -90,14 +95,13 @@
       qid = jsonData[i].question;
       
         eData += '<h4>Question ' + qNum + ', Points: ' + pnts + '<br><br>' + desc + '\
-                  <br><br><textarea name="codes[]" rows="10" cols="40" placeholder="Type code here...">\
-                  </textarea><br><hr class="qbreak">';
+                  <br><br><textarea name="codes[]" rows="10" cols="40" placeholder="Type code here..."></textarea><br><br><hr class="qbreak">';
         question.push(qid);
         points.push(pnts);
         qNum++;
       }
       console.log(question);
-      document.getElementById("field1").innerHTML = '<fieldset id="populate_exam"><legend><b>' + getExamName + ' Exam</b></legend>' + eData + '<br><br><button id="button2" type="button">Submit</button></fieldset>';
+      document.getElementById("field1").innerHTML = '<fieldset id="populate_exam"><legend><b>Exam: ' + getExamName + '</b></legend>' + eData + '<br><br><button id="button2" type="button">Submit</button></fieldset>';
       var button2 = document.getElementById("button2");
       button2.addEventListener("click", takeExam);
     }
@@ -144,7 +148,7 @@
         
         tcData += '</table>';
         eData += '<fieldset><h3>Question ' + qNum + ':</h3>' + desc + '<h4>Answer:</h4>\
-              <textarea rows="5" cols="30" disabled="true">' + code + '</textarea>\
+              <textarea rows="5" cols="30" disabled="true">' + code + ' </textarea>\
               <h4>Auto Grader Results:</h4>' + (tcData == '<table><tr><th>Test Cases</th></tr>\
               </table>' ? "No Reductions" : tcData) + '<br><br>Grade: ' + grde + '/' + pnts + '\
               <h4>Comments:</h4>' + comm + '</fieldset>';
@@ -153,41 +157,41 @@
         qNum++;
       }
       document.getElementById("field1").innerHTML = '<fieldset id="examTitle">\
-               <h2>' + getExamName + ' Exam<h2></fieldset>' + eData + '<fieldset>\
+               <h2>Exam: ' + getExamName + '<h2></fieldset>' + eData + '<fieldset>\
                <h2>Final Grade: ' + eGrade + '/' + ePoints + '</h2></fieldset>';
     }
     
     //***************AJAX and FormData***************
     
     function submit(cFunction){
-      var formElement = new FormData(document.querySelector("form"));
+      var formData = new FormData(document.querySelector("form"));
       
       console.log(message);
-      formElement.append("message", message);
+      formData.append("message", message);
       
       if(message == "TakeExam"){
         var i, code = [];
         var codes = document.getElementsByName('codes[]');
         for(i=0; i<question.length; i++){
-          code.push(codes[i].value + ";");
+          code.push(codes[i].value + " ");
         }
-        formElement.append("examName", getExamName);
-        formElement.append("examId", getExamID);
-        formElement.append("questionA", question);
-        formElement.append("points", points);
-        formElement.append("code", code);
+        formData.append("examName", getExamName);
+        formData.append("examId", getExamID);
+        formData.append("questionA", question);
+        formData.append("points", points);
+        formData.append("code", code);
       }
       
       if(message == "StudentViewExam"){
-        formElement.append("examId", getExamName);
+        formData.append("examId", getExamName);
       }
       
       if(message == "InstructorViewExam"){
-        formElement.append("examId", getExamID);
+        formData.append("examId", getExamID);
       }
       
-      for(var pair of formElement.entries()){
-        console.log(pair[0]+ ', '+ pair[1]);
+      for(var cOutput of formData.entries()){
+        console.log(cOutput[0]+ '|| '+ cOutput[1]);
       }
       
       var xhr = new XMLHttpRequest();
@@ -202,7 +206,7 @@
       };
       
       xhr.open("POST", "curlhandler.php", true);
-      xhr.send(formElement);
+      xhr.send(formData);
     }
     getExams();
   </script>

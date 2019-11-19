@@ -9,7 +9,7 @@
     <form id="index">
         <header>
             <nav>
-              <h1>This is the INSTRUCTOR landing page.</h1>
+              <p id="welcome"></p>
               <ul>
               <li><button id="button1" type="button">Create Question</button></li>
               <li><button id="button2" type="button">Create Exam</button></li>
@@ -20,13 +20,14 @@
           </header>
       <div class="split left">
       <br>
+        <fieldset><p id="status_area"></p></fieldset><br>
         <fieldset><p id="work_area"></p></fieldset><br><br>
-        <fieldset><p id="response_area"></p></fieldset><br><br>
+        <fieldset><p id="response_area" hidden></p></fieldset><br><br>
       </div>
     </form>
 
     <div class="split right">
-      <h3>Question Bank:</h3>
+      <h3>Search Questions:</h3>
       <nav>
       <h3 class="sort_bar">Difficulty: <select id="sort_diff" name="sort_diff">
         <option value="all"></option>
@@ -37,12 +38,15 @@
       Topic: <select id="sort_topic" name="sort_topic">
         <option value="all"></option>
         <option value="if">if</option>
-        <option value="loop">loop</option>
+        <option value="for">for</option>
+        <option value="while">while</option>
+        <option value="print">print</option>
         <option value="arithmatic">arithmatic</option>
       </select>
       Keyword: <input type="text" id="sort_keyword" name="sort_keyword">
       <button id="button5" type="button">Sort</button></h3>
-      <p id="insertQuestion"></p>
+      <hr>
+      <p id="insertFieldRight"></p>
       </nav>
     </div>
   </body>
@@ -67,7 +71,9 @@
     
 //GV---------------------Global Variables----------------------------------
     
-    var message = "", gexid = "", gqid = [];
+    var message = "";
+    var gexid = "";
+    var gqid = [];
     
 //LF---------------------Logout Function----------------------------------
     
@@ -75,7 +81,15 @@
       console.log("Logout Button Click");
       window.location.href = "index.html";
     }
-    
+
+//USER--------------------User Name-------------------------------------------
+    function user(jsonData){
+      var user = ""
+      // user = jsonData.user;
+      document.getElementById("welcome").innerHTML = 'Welcome !'; 
+      message = "GetUser";
+      submit();
+    }
 //CBF---------------------Call Back Function----------------------------------
     
 function setResp(jsonData){
@@ -89,6 +103,7 @@ function setResp(jsonData){
 //CEF--------------------Create Exam Function----------------------------------
     
 function createExam(){
+  showQuestions();
   document.getElementById("response_area").innerHTML = '';
   document.getElementById("work_area").innerHTML = '\
     <h3>Create Exam:</h3>\
@@ -104,7 +119,9 @@ function createExam(){
 //CQF--------------------Create Question Function-----------------------------
     
     function createQuestion(){
-      console.log("Create Question");
+      message = "CreateQuestion";
+      console.log("Create Question Button Click");
+      document.getElementById("insertFieldRight").innerHTML = ''; 
       document.getElementById("response_area").innerHTML = '';
       document.getElementById("work_area").innerHTML = '\
         <h3>Create a Question:</h3> <label>Function Name:</label><input type="text" name="question">\
@@ -115,30 +132,32 @@ function createExam(){
           <option value="hard">hard</option>\
         </select><label>Topic:</label><select name="topic">\
           <option value="if">if</option>\
-          <option value="loop">loop</option>\
+          <option value="for">for</option>\
+          <option value="while">while</option>\
+          <option value="print">print</option>\
           <option value="arithmetic">arithmetic</option></select>\
           <br>\
         <label for="tc1"><input type="checkbox" id="tcs1Check" onclick="EnableDisable1(this)">\
         Test Case 1:<input type="text" name="tcs1" id="tc1" disabled="disable">\
         Test Case 1 Result:<input type="text" name="tcsr1" id="tcr1" disabled="disable"></label><br>\
         \
-        <label for="tc2"><input type="checkbox" id="tcs2Check"  onclick="EnableDisable2(this)">\
+        <label for="tc2"><input type="checkbox" id="tcs2Check" onclick="EnableDisable2(this)">\
         Test Case 2:</label><input type="text" name="tcs2" id="tc2" disabled="disable">\
         Test Case 2 Result:</label><input type="text" name="tcsr2" id="tcr2" disabled="disable"></label><br>\
         \
-        <label for="tc3"><input type="checkbox" id="tcs3Check"  onclick="EnableDisable3(this)">\
+        <label for="tc3"><input type="checkbox" id="tcs3Check" onclick="EnableDisable3(this)">\
         <label>Test Case 3:</label><input type="text" name="tcs3" id="tc3" disabled="disable">\
         <label>Test Case 3 Result:</label><input type="text" name="tcsr3" id="tcr3" disabled="disable"><br>\
         \
-        <label for="tc4"><input type="checkbox" id="tcs4Check"  onclick="EnableDisable4(this)">\
+        <label for="tc4"><input type="checkbox" id="tcs4Check" onclick="EnableDisable4(this)">\
         <label>Test Case 4:</label><input type="text" name="tcs4" id="tc4" disabled="disable">\
         <label>Test Case 4 Result:</label><input type="text" name="tcsr4" id="tcr4" disabled="disable"><br>\
         \
-        <label for="tc5"><input type="checkbox" id="tcs5Check"  onclick="EnableDisable5(this)">\
+        <label for="tc5"><input type="checkbox" id="tcs5Check" onclick="EnableDisable5(this)">\
         <label>Test Case 5:</label><input type="text" name="tcs5" id="tc5" disabled="disable">\
         <label>Test Case 5 Result:</label><input type="text" name="tcsr5" id="tcr5" disabled="disable"><br>\
         \
-        <label for="tc6"><input type="checkbox" id="tcs6Check"  onclick="EnableDisable6(this)">\
+        <label for="tc6"><input type="checkbox" id="tcs6Check" onclick="EnableDisable6(this)">\
         <label>Test Case 6:</label><input type="text" name="tcs6" id="tc6" disabled="disable">\
         <label>Test Case 6 Result:</label><input type="text" name="tcsr6" id="tcr6" disabled="disable"><br>\
         <button id="button7" type="button">Submit</button>';
@@ -217,6 +236,7 @@ function createExam(){
     
     function showExams(){
       message = "GetExam";
+      document.getElementById("insertFieldRight").innerHTML = ''; 
       submit(getExam);
     }
     
@@ -226,15 +246,15 @@ function createExam(){
         examid = jsonData[i].examName;
         status = jsonData[i].releaseStatus;
         if(status == "2"){
-          released += '<br>Released: ' + examid;
+          released += '<tr><td bgcolor="#00FF00">Released:</td><td>' + examid + '</td></tr>';
         } else if(status == "0"){
-          pending += '<br>Pending Student Action: ' + examid;
+          pending += '<tr><td bgcolor="#00FFF7">Pending Student Action:</td><td>' + examid + '</td></tr>';
         } else{
-          review += '<br>Needs Instructor Review: '+ examid + ' <button  type="button" onclick="previewExam(\'' + examid + '\')"> Open</button> ';
+          review += '<tr><td bgcolor="yellow">Needs Instructor Review:</td><td>'+ examid + '</td><td><button type="button" onclick="previewExam(\'' + examid + '\')"> Open</button></td></tr>';
         }
       }
       document.getElementById("response_area").innerHTML = '';
-      document.getElementById("work_area").innerHTML = '<h3>Available Exams:</h3>' + review + released + pending;
+      document.getElementById("work_area").innerHTML = '<h3>Available Exams:</h3><table style="width:75%"><tr><th>Status:</th><th>Exam:</th><th>Action:</th>' + review + pending + released + '</table></tr>';
     }
     
     function previewExam(examid){
@@ -244,59 +264,186 @@ function createExam(){
     }
     
     function buildExam(jsonData){
-      var i, qnum = 1, agdata = "", exdata="", fun = "", rtn = "", tp = "", desc = "", cd = "", grd = "", ptt = "", comm = "", tgd = "";
+      var i, qnum = 1, agdata = "", exdata="", fun = "", whi = "", top = "", desc = "", cde = "", 
+      grd = "", ptt = "", comm = "", tgd = "", fr = "", col = "", prt = "", rtn = "", tce1 = "",
+      tce2 = "", tce3 = "", tce4 = "", tce5 = "", tce6 = "";
       gqid = [];
       for(i=0; i<jsonData.length; i++){
         
         qid = jsonData[i].questionID;
-        fn2 = jsonData[i].question;
-        tp = jsonData[i].topic;
+        ques = jsonData[i].question;
+        top = jsonData[i].topic;
         desc = jsonData[i].description;
-        cd = jsonData[i].code;
-        grd = jsonData[i].grade;
+        cde = jsonData[i].code;
+        // grd = jsonData[i].grade;
         ptt = jsonData[i].points;
         comm = jsonData[i].comments;
-        fun = jsonData[i].error1;
-        rtn = jsonData[i].error2;
+        fun = jsonData[i].nameError;
+        col = jsonData[i].colError;
+        whi = jsonData[i].whileError;
+        fr = jsonData[i].forError;
+        prt = jsonData[i].printError;
+        rtn = jsonData[i].returnError;
+        tce1 = jsonData[i].tcError1;
+        tce2 = jsonData[i].tcError2;
+        tce3 = jsonData[i].tcError3;
+        tce4 = jsonData[i].tcError4;
+        tce5 = jsonData[i].tcError5;
+        tce6 = jsonData[i].tcError6;
+// See if grade can come back as total points
         gqid.push(qid);
 
-        agdata = '<table><tr><th>Test Cases</th></tr>';
-        
-        if(rtn =button8= "0"){
-          agdata += '<tr><td>No return statement: -\
-                     <input id=\'rtn' + i + '\' value=\'' + rtn + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
-                     </td></tr>';
-        }
-        if(fun == "0"){
-          agdata += '<tr><td>Incorrect function name: -\
+        agdata = '<table id="instructor_exam_area"><tr><th colspan="3">Test Cases</th></tr>';
+
+        if(tce1 != "0"){
+          agdata += '<tr><td>Test Case 1:</td><td> -\
+                     <input id=\'tcer1' + i + '\' value=\'' + tce1 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Test Case 1:</td><td> -\
+                     <input id=\'tcer1' + i + '\' value=\'' + tce1 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+        if(tce2 != "0"){
+          agdata += '<tr><td>Test Case 2:</td><td> -\
+                     <input id=\'tcer2' + i + '\' value=\'' + tce2 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Test Case 2:</td><td> -\
+                     <input id=\'tcer2' + i + '\' value=\'' + tce2 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+        if(tce3 != "0"){
+          agdata += '<tr><td>Test Case 3:</td><td> -\
+                     <input id=\'tcer3' + i + '\' value=\'' + tce3 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Test Case 3:</td><td> -\
+                     <input id=\'tcer3' + i + '\' value=\'' + tce3 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+        if(tce4 != "0"){
+          agdata += '<tr><td>Test Case 4:</td><td> -\
+                     <input id=\'tcer4' + i + '\' value=\'' + tce4 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Test Case 4:</td><td> -\
+                     <input id=\'tcer4' + i + '\' value=\'' + tce4 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+        if(tce5 != "0"){
+          agdata += '<tr><td>Test Case 5:</td><td> -\
+                     <input id=\'tcer5' + i + '\' value=\'' + tce5 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Test Case 5:</td><td> -\
+                     <input id=\'tcer5' + i + '\' value=\'' + tce5 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+        if(tce6 != "0"){
+          agdata += '<tr><td>Test Case 6:</td><td> -\
+                     <input id=\'tcer6' + i + '\' value=\'' + tce6 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Test Case 6:</td><td> -\
+                     <input id=\'tcer6' + i + '\' value=\'' + tce6 + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+        if(fun != "0"){
+          agdata += '<tr><td>Incorrect function name:</td><td> -\
                      <input id=\'fun' + i + '\' value=\'' + fun + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
-                     </td></tr>';
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Incorrect function name:</td><td> -\
+                     <input id=\'fun' + i + '\' value=\'' + fun + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+        if(rtn != "0"){
+          agdata += '<tr><td>No return statement:</td><td> -\
+                     <input id=\'rtn' + i + '\' value=\'' + rtn + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>No return statement:</td><td> -\
+                     <input id=\'rtn' + i + '\' value=\'' + rtn + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
         }
-        
-        agdata += '</table>';
-        exdata += '<h3>Question ' + qnum + ':</h3><b>Function Name: </b>' + fn2 + '<b>\
-                   Topic: </b>' + tp + '<br><br>' + desc + '<h4>Answer:</h4>\
-                   <textarea rows="5" cols="25" disabled="true">' + cd + '</textarea>\
-                   <h3>Add Comments:</h3><textarea name="comm[]" rows="5" cols="25" value=' + comm + '></textarea>\
+
+        if(col != "0"){
+          agdata += '<tr><td>Missing colon:</td><td> -\
+                     <input id=\'col' + i + '\' value=\'' + col + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Missing colon:</td><td> -\
+                     <input id=\'col' + i + '\' value=\'' + col + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+        if(whi != "0"){
+          agdata += '<tr><td>Missing while loop:</td><td> -\
+                     <input id=\'whi' + i + '\' value=\'' + whi + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Missing while loop:</td><td> -\
+                     <input id=\'whi' + i + '\' value=\'' + whi + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+         if(fr != "0"){
+          agdata += '<tr><td>Missing for loop:</td><td> -\
+                     <input id=\'fr' + i + '\' value=\'' + fr + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Missing for loop:</td><td> -\
+                     <input id=\'fr' + i + '\' value=\'' + fr + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+        if(prt != "0"){
+          agdata += '<tr><td>Missing print statement:</td><td> -\
+                     <input id=\'prt' + i + '\' value=\'' + prt + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="red">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }else{
+                    agdata += '<tr><td>Missing print statement:</td><td> -\
+                     <input id=\'prt' + i + '\' value=\'' + prt + '\' oninput="totalCalc(' + i + ', ' + ptt + ')">\
+                     </td><td bgcolor="green">&nbsp;&nbsp;&nbsp;</td></tr>';
+                     }
+          agdata += '</table>';
+
+        exdata += '<h3>Question ' + qnum + ':</h3><b>Function Name: </b>' + ques + '<b>\
+                   Topic: </b>' + top + '<br><br>' + desc + '<h4>Student Answer and Comments:</h4>\
+                   <textarea rows="5" cols="25" disabled="true">' + cde + '</textarea>\
+                   <textarea name="comm[]" rows="5" cols="25" value=' + comm + ' placeholder="Comments..."></textarea>\
                    <h3>Auto Grader Results:</h3>' + (agdata == "<table><tr><th>\
                    Test Case</th></tr></table>" ? "No Reductions" : agdata) + '<br><br>\
                    Grade: <input type="text" name="grd[]"> / ' + ptt + '<br><hr>';
         qnum++;
       }
-      document.getElementById("response_area").innerHTML = '<h3> Exam: ' + gexid + '<h3>' + exdata + '<br><br><button id="button8" type="button">Release Exam</button>';
+      document.getElementById("insertFieldRight").innerHTML = '<table style="width:100%"><tr><td bgcolor="black" style="color:white; font-size:16pt;"><center> Exam: ' + gexid + '</center></td></tr></table>' + exdata + '<br><br><button id="button8" type="button">Release Exam</button>';
+      
       for(i=0; i<jsonData.length; i++){
+        ptt = jsonData[i].points;
         totalCalc(i, ptt);
       }
+  
       var button8 = document.getElementById("button8");
       button8.addEventListener("click", releaseExam);
     }
 //CALC-------------------Calculate Question Worth - Auto Grade Deducations------
     function totalCalc(i, ptt){
       var total = ptt;
-
+      
       if(document.getElementById('rtn' + i)){total -= document.getElementById('rtn' + i).value;}
-      if(document.getElementById('fun' + i)){total -= document.getElementById('fun' + i).value;} 
-      document.getElementsByName('grd[]')[i].value = total;
+      if(document.getElementById('fun' + i)){total -= document.getElementById('fun' + i).value;}
+      if(document.getElementById('col' + i)){total -= document.getElementById('col' + i).value;}
+      if(document.getElementById('prt' + i)){total -= document.getElementById('prt' + i).value;}
+      if(document.getElementById('whi' + i)){total -= document.getElementById('whi' + i).value;}
+      if(document.getElementById('fr' + i)){total -= document.getElementById('fr' + i).value;}
+      if(document.getElementById('tcer1' + i)){total -= document.getElementById('tcer1' + i).value;}
+      if(document.getElementById('tcer2' + i)){total -= document.getElementById('tcer2' + i).value;}
+      if(document.getElementById('tcer3' + i)){total -= document.getElementById('tcer3' + i).value;}
+      if(document.getElementById('tcer4' + i)){total -= document.getElementById('tcer4' + i).value;}
+      if(document.getElementById('tcer5' + i)){total -= document.getElementById('tcer5' + i).value;}
+      if(document.getElementById('tcer6' + i)){total -= document.getElementById('tcer6' + i).value;}
+      document.getElementsByName('grd[]')[i].value = (total);
+
+     // document.getElementsByName('grd[]')[i].value = jsonData[i].grade;
     }
 
     function totalPoints(){
@@ -308,6 +455,7 @@ function createExam(){
       }
       document.getElementById("totalPoints").innerHTML = points;
     }
+
 //REL--------------------Release Exam-------------------------------------------   
     function releaseExam(){
       console.log("Release Exam");
@@ -317,18 +465,17 @@ function createExam(){
     
 //QBF--------------------Question Bank Function----------------------------------
     
-    function showQuestions(){
+function showQuestions(){
       message = "GetQuestions";
       submit(buildQB);
     };
     
     function buildQB(jsonData){
-      var i, qbdata = "", qid = "", desc = "", qtype = "", fname = "", tc1 = "", tc2 = "",
-          tcr1 = "", tcr2 = "";
+      var i, qbdata = "", qid = "", desc = "", qtype = "", fname = "", tc1 = "", tc2 = "", tc3 = "",
+          tc4 = "", tc5 = "", tc6 = "", tcr1 = "", tcr2 = "", tcr3 = "", tcr4 = "", tcr5 = "", tcr6 = "";
       var sort_topic = document.getElementById("sort_topic").value;
       var sort_diff = document.getElementById("sort_diff").value;
       var sort_keyword = document.getElementById("sort_keyword").value;
-
       for(i=0; i<jsonData.length; i++){ 
         qid = jsonData[i].questionID;
         fname = jsonData[i].question;
@@ -350,20 +497,60 @@ function createExam(){
         
         if((sort_diff == diff || sort_diff == "all") && (qtype.includes(sort_topic) || sort_topic == "all") 
         && (desc.includes(sort_keyword) || sort_keyword == "")){
+          if(tc3 == ""){
            qbdata += '<fieldset id="question' + i + '"><button type="button" onclick="addQuestion(question' + i + ')">\
            Add</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br>\
-           <b>Test Case 1: </b>' + tc1 + ' | <b> Test Case 1 Output: </b>' + tcr1 + '\
-           <input type="text" name="qid[]" value=' + qid + ' hidden>||\
+           <b>Test Case 1: </b>' + tc1 + ' | <b> Test Case 1 Output: </b>' + tcr1 + '<br>\
+           <input type="text" name="qid[]" value=' + qid + ' hidden>\
            <b> Test Case 2: </b>' + tc2 + ' | <b> Test Case 2 Output: </b>' + tcr2 + '<br>\
-           <b> Test Case 3: </b>' + tc3 + ' | <b> Test Case 3 Output: </b>' + tcr3 + '\
+           <b>Points: </b><input type="number" name="pts[]"\
+           oninput="totalPoints()"><br>' + '<b>Difficulty: </b>' + diff + '<br><b>Description: </b>' + desc + '<br><br></fieldset>';
+          }else if(tc4 == ""){
+            qbdata += '<fieldset id="question' + i + '"><button type="button" onclick="addQuestion(question' + i + ')">\
+           Add</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br>\
+           <b>Test Case 1: </b>' + tc1 + ' | <b> Test Case 1 Output: </b>' + tcr1 + '<br>\
+           <input type="text" name="qid[]" value=' + qid + ' hidden>\
+           <b> Test Case 2: </b>' + tc2 + ' | <b> Test Case 2 Output: </b>' + tcr2 + '<br>\
+           <b> Test Case 3: </b>' + tc3 + ' | <b> Test Case 3 Output: </b>' + tcr3 + '<br>\
+           <b>Points: </b><input type="number" name="pts[]"\
+           oninput="totalPoints()"><br>' + '<b>Difficulty: </b>' + diff + '<br><b>Description: </b>' + desc + '<br><br></fieldset>';
+          }else if(tc5 == ""){
+            qbdata += '<fieldset id="question' + i + '"><button type="button" onclick="addQuestion(question' + i + ')">\
+           Add</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br>\
+           <b>Test Case 1: </b>' + tc1 + ' | <b> Test Case 1 Output: </b>' + tcr1 + '<br>\
+           <input type="text" name="qid[]" value=' + qid + ' hidden>\
+           <b> Test Case 2: </b>' + tc2 + ' | <b> Test Case 2 Output: </b>' + tcr2 + '<br>\
+           <b> Test Case 3: </b>' + tc3 + ' | <b> Test Case 3 Output: </b>' + tcr3 + '<br>\
            <b> Test Case 4: </b>' + tc4 + ' | <b> Test Case 4 Output: </b>' + tcr4 + '<br>\
-           <b> Test Case 5: </b>' + tc5 + ' | <b> Test Case 5 Output: </b>' + tcr5 + '\
+           <b>Points: </b><input type="number" name="pts[]"\
+           oninput="totalPoints()"><br>' + '<b>Difficulty: </b>' + diff + '<br><b>Description: </b>' + desc + '<br><br></fieldset>';
+          }else if(tc6 == ""){
+            qbdata += '<fieldset id="question' + i + '"><button type="button" onclick="addQuestion(question' + i + ')">\
+           Add</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br>\
+           <b>Test Case 1: </b>' + tc1 + ' | <b> Test Case 1 Output: </b>' + tcr1 + '<br>\
+           <input type="text" name="qid[]" value=' + qid + ' hidden>\
+           <b> Test Case 2: </b>' + tc2 + ' | <b> Test Case 2 Output: </b>' + tcr2 + '<br>\
+           <b> Test Case 3: </b>' + tc3 + ' | <b> Test Case 3 Output: </b>' + tcr3 + '<br>\
+           <b> Test Case 4: </b>' + tc4 + ' | <b> Test Case 4 Output: </b>' + tcr4 + '<br>\
+           <b> Test Case 5: </b>' + tc5 + ' | <b> Test Case 5 Output: </b>' + tcr5 + '<br>\
+           <b>Points: </b><input type="number" name="pts[]"\
+           oninput="totalPoints()"><br>' + '<b>Difficulty: </b>' + diff + '<br><b>Description: </b>' + desc + '<br><br></fieldset>';
+          }else{
+            qbdata += '<fieldset id="question' + i + '"><button type="button" onclick="addQuestion(question' + i + ')">\
+           Add</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br>\
+           <b>Test Case 1: </b>' + tc1 + ' | <b> Test Case 1 Output: </b>' + tcr1 + '<br>\
+           <input type="text" name="qid[]" value=' + qid + ' hidden>\
+           <b> Test Case 2: </b>' + tc2 + ' | <b> Test Case 2 Output: </b>' + tcr2 + '<br>\
+           <b> Test Case 3: </b>' + tc3 + ' | <b> Test Case 3 Output: </b>' + tcr3 + '<br>\
+           <b> Test Case 4: </b>' + tc4 + ' | <b> Test Case 4 Output: </b>' + tcr4 + '<br>\
+           <b> Test Case 5: </b>' + tc5 + ' | <b> Test Case 5 Output: </b>' + tcr5 + '<br>\
            <b> Test Case 6: </b>' + tc6 + ' | <b> Test Case 6 Output: </b>' + tcr6 + '<br>\
            <b>Points: </b><input type="number" name="pts[]"\
            oninput="totalPoints()"><br>' + '<b>Difficulty: </b>' + diff + '<br><b>Description: </b>' + desc + '<br><br></fieldset>';
+          }
         }
       }
-      document.getElementById("insertQuestion").innerHTML = qbdata;
+      document.getElementById("insertFieldRight").innerHTML = qbdata;
     }
     
     function addQuestion(field){
@@ -389,33 +576,65 @@ function createExam(){
         }
         formData.append("questionID", questionID);
         formData.append("points", points);
+        document.getElementById("status_area").innerHTML = 'Exam Successfully Created!';
       }
       
       if(message == "ReleaseExam"){
-        var grade = [], comments = [], rtn = [], fun = [];
+        var grade = [], comments = [], rtn = [], fun = [], col = [], whi = [], prt = [], fr = [], tce1 = [],
+        tce2 = [], tce3 = [], tce4 = [], tce5 = [], tce6 = [];
         var grd = document.getElementsByName("grd[]");
         var comm = document.getElementsByName("comm[]");
 
         for(var i=0; i<grd.length; i++){
           if(document.getElementById('rtn' + i)){rtn.push(document.getElementById('rtn' + i).value);} else{rtn.push(0);}
           if(document.getElementById('fun' + i)){fun.push(document.getElementById('fun' + i).value);} else{fun.push(0);}
+          if(document.getElementById('col' + i)){col.push(document.getElementById('col' + i).value);} else{col.push(0);}
+          if(document.getElementById('whi' + i)){whi.push(document.getElementById('whi' + i).value);} else{whi.push(0);}
+          if(document.getElementById('prt' + i)){prt.push(document.getElementById('prt' + i).value);} else{prt.push(0);}
+          if(document.getElementById('fr' + i)){fr.push(document.getElementById('fr' + i).value);} else{fr.push(0);}
+          if(document.getElementById('tcer1' + i)){tce1.push(document.getElementById('tcer1' + i).value);} else{tce1.push(0);}
+          if(document.getElementById('tcer2' + i)){tce2.push(document.getElementById('tcer2' + i).value);} else{tce2.push(0);}
+          if(document.getElementById('tcer3' + i)){tce3.push(document.getElementById('tcer3' + i).value);} else{tce3.push(0);}
+          if(document.getElementById('tcer4' + i)){tce4.push(document.getElementById('tcer4' + i).value);} else{tce4.push(0);}
+          if(document.getElementById('tcer5' + i)){tce5.push(document.getElementById('tcer5' + i).value);} else{tce5.push(0);}
+          if(document.getElementById('tcer6' + i)){tce6.push(document.getElementById('tcer6' + i).value);} else{tce6.push(0);}
 
           grade.push(grd[i].value);
           comments.push(comm[i].value);
         }
 
         formData.append("return", rtn);
-        formData.append("question", fun);
+        formData.append("nameE", fun);
+        formData.append("while", whi);
+        formData.append("colon", col);
+        formData.append("for", fr);
+        formData.append("print", prt);
+
+        formData.append("tce1", tce1);
+        formData.append("tce2", tce2);
+        formData.append("tce3", tce3);
+        formData.append("tce4", tce4);
+        formData.append("tce5", tce5);
+        formData.append("tce6", tce6);
+
         formData.append("questionID", gqid);
         formData.append("examId", gexid);
         formData.append("grade", grade);
         formData.append("comments", comments);
+        document.getElementById("status_area").innerHTML = 'Exam Has Been Released!';
       }
 
       if(message == "StudentViewExam"){
         formData.append("examId", gexid);
       }
-      
+
+      if(message == "CreateQuestion"){
+        document.getElementById("status_area").innerHTML = 'Question Successfully Submitted!';
+      }
+      for(var pair of formData.entries()){
+        console.log(pair[0]+ ', '+ pair[1]);
+      }
+
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200) {
@@ -430,7 +649,7 @@ function createExam(){
       xhr.send(formData);
       
     }
-    
     showQuestions();
+    user();
   </script>
 </html>
