@@ -81,12 +81,40 @@ header nav h3.sort_bar {
     font-size: .725em;
 }
 
+div.textbox {
+    display:grid;
+    grid-template-columns: max-content max-content;
+    grid-gap:5px;
+    height: 5%;
+    border: none;
+    
+}
+div.textbox label { 
+    text-align:right; 
+}
+
+div.textbox label:after { 
+    content: ""; 
+}
+
+div.textbox input {
+    border-radius: 0.5em;
+}
+
 .right #pointbox {
     display: none;
 }
 
 .right .labelPoints {
     display: none;
+}
+
+.right fieldset {
+    background: rgb(216, 211, 205);
+}
+
+.right fieldset:nth-child(odd) {
+    background: rgb(199, 194, 188);
 }
 
 .right button {
@@ -228,14 +256,20 @@ header h1 {
     height: 10%;
 }
 
-.examTitle {
+div.examTitle {
     background: black;
     color: white;
     width: 100%;
+    height: 13%;
+    overflow-x: hidden;
+    display: inline-block;
 }
 
-.qArea {
+div.qArea {
     width: 100%;
+    height: 100%;
+    display: inline-block;
+    overflow-x: visible;
 }
 .qArea legend {
     color: black;

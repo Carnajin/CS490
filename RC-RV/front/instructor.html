@@ -83,11 +83,7 @@
 
 //USER--------------------User Name-------------------------------------------
     function user(jsonData){
-      var user = "";
-      // user = jsonData.user;
-      document.getElementById("welcome").innerHTML = 'Welcome !'; 
-      message = "GetUser";
-      submit();
+      document.getElementById("welcome").innerHTML = 'Welcome Instructor!'; 
     }
 //CBF---------------------Call Back Function----------------------------------
     
@@ -106,8 +102,10 @@ function createExam(){
   document.getElementById("response_area").innerHTML = '';
   document.getElementById("work_area").innerHTML = '\
     <h3>Create Exam:</h3>\
+    <div class="textbox">\
     <label>Exam Name:</label>\
     <input type="text" name="examName">\
+    </div>\
     <p>Total Points: <label id="totalPoints"></label></p>\
     <button id="button6" type="button">Submit</button>';
       
@@ -455,7 +453,6 @@ function createExam(){
 
 //REL--------------------Release Exam-------------------------------------------   
     function releaseExam(){
-      console.log("Release Exam");
       message = "ReleaseExam";
       submit(setResp);
     };
@@ -521,8 +518,7 @@ function createExam(){
         && (desc.includes(sort_keyword) || sort_keyword == "")){
           if(tc3 == ""){
            qbdata += '<fieldset id="question' + i + '"><button id="addQuestion" type="button" onclick="addQuestion(question' + i + ')">\
-           Add</button><button id="removeQuestion" type="button" onclick="removeQuestion(question' + i + ')">\
-           Remove</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br>\
+           Add</button><br><b>Function Name: </b>' + fname + '<b> Topic: </b>' + qtype + '<br>\
            <b>Test Case 1: </b>' + tc1 + ' | <b> Test Case 1 Output: </b>' + tcr1 + '<br>\
            <input type="text" name="qid[]" value=' + qid + ' hidden>\
            <b> Test Case 2: </b>' + tc2 + ' | <b> Test Case 2 Output: </b>' + tcr2 + '<br>\
@@ -580,11 +576,6 @@ function createExam(){
       field.removeChild(field.childNodes[0]);
       document.getElementById("work_area").appendChild(field);
     }     
-
-    function removeQuestion(field){
-      field.removeChild(field.childNodes[0]);
-      document.getElementById("insertFieldRight").append(field);
-    }
         
 //ADF--------------------AJAX Driver Function----------------------------------
     
@@ -615,18 +606,42 @@ function createExam(){
         var comm = document.getElementsByName("comm[]");
 
         for(var i=0; i<grd.length; i++){
-          if(document.getElementById('rtn' + i)){rtn.push(document.getElementById('rtn' + i).value);} else{rtn.push(0);}
-          if(document.getElementById('fun' + i)){fun.push(document.getElementById('fun' + i).value);} else{fun.push(0);}
-          if(document.getElementById('col' + i)){col.push(document.getElementById('col' + i).value);} else{col.push(0);}
-          if(document.getElementById('whi' + i)){whi.push(document.getElementById('whi' + i).value);} else{whi.push(0);}
-          if(document.getElementById('prt' + i)){prt.push(document.getElementById('prt' + i).value);} else{prt.push(0);}
-          if(document.getElementById('fr' + i)){fr.push(document.getElementById('fr' + i).value);} else{fr.push(0);}
-          if(document.getElementById('tcer1' + i)){tce1.push(document.getElementById('tcer1' + i).value);} else{tce1.push(0);}
-          if(document.getElementById('tcer2' + i)){tce2.push(document.getElementById('tcer2' + i).value);} else{tce2.push(0);}
-          if(document.getElementById('tcer3' + i)){tce3.push(document.getElementById('tcer3' + i).value);} else{tce3.push(0);}
-          if(document.getElementById('tcer4' + i)){tce4.push(document.getElementById('tcer4' + i).value);} else{tce4.push(0);}
-          if(document.getElementById('tcer5' + i)){tce5.push(document.getElementById('tcer5' + i).value);} else{tce5.push(0);}
-          if(document.getElementById('tcer6' + i)){tce6.push(document.getElementById('tcer6' + i).value);} else{tce6.push(0);}
+          if(document.getElementById('rtn' + i)){rtn.push(document.getElementById('rtn' + i).value);
+            }else{rtn.push(0);
+          }
+          if(document.getElementById('fun' + i)){fun.push(document.getElementById('fun' + i).value);
+            }else{fun.push(0);
+          }
+          if(document.getElementById('col' + i)){col.push(document.getElementById('col' + i).value);
+            }else{col.push(0);
+          }
+          if(document.getElementById('whi' + i)){whi.push(document.getElementById('whi' + i).value);
+            }else{whi.push(0);
+          }
+          if(document.getElementById('prt' + i)){prt.push(document.getElementById('prt' + i).value);
+            }else{prt.push(0);
+          }
+          if(document.getElementById('fr' + i)){fr.push(document.getElementById('fr' + i).value);
+            }else{fr.push(0);
+          }
+          if(document.getElementById('tcer1' + i)){tce1.push(document.getElementById('tcer1' + i).value);
+            }else{tce1.push(0);
+          }
+          if(document.getElementById('tcer2' + i)){tce2.push(document.getElementById('tcer2' + i).value);
+            }else{tce2.push(0);
+          }
+          if(document.getElementById('tcer3' + i)){tce3.push(document.getElementById('tcer3' + i).value);
+            }else{tce3.push(0);
+          }
+          if(document.getElementById('tcer4' + i)){tce4.push(document.getElementById('tcer4' + i).value);
+            }else{tce4.push(0);
+          }
+          if(document.getElementById('tcer5' + i)){tce5.push(document.getElementById('tcer5' + i).value);
+            }else{tce5.push(0);
+          }
+          if(document.getElementById('tcer6' + i)){tce6.push(document.getElementById('tcer6' + i).value);
+            }else{tce6.push(0);
+          }
 
           grade.push(grd[i].value);
           comments.push(comm[i].value);

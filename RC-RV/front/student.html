@@ -45,19 +45,15 @@
 
 //USER--------------------User Name-------------------------------------------
     function user(jsonData){
-      var user = "";
-      // user = jsonData.user;
-      document.getElementById("welcome").innerHTML = 'Welcome !'; 
-      message = "GetUser";
-      submit();
+      document.getElementById("welcome").innerHTML = 'Welcome Student!'; 
     }
     
-//LF---------------------Logout Function----------------------------------
+//LF---------------------Logout Function-------------------------------------
     
     function logout(){
       window.location.href = "index.html";
     }
-    
+//GE---------------------Get Exams-------------------------------------------    
     function getExams(){
       message = "GetExam";
       submit(studentAction);
@@ -241,8 +237,8 @@
         formData.append("examId", getExamID);
       }
       
-      for(var cOutput of formData.entries()){
-        console.log(cOutput[0]+ '|| '+ cOutput[1]);
+      for(var inspectOutput of formData.entries()){
+        console.log(inspectOutput[0]+ '=> '+ inspectOutput[1]);
       }
       
       var xhr = new XMLHttpRequest();

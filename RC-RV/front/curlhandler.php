@@ -146,8 +146,8 @@ switch($message) {
     echo "Error(front): Check Cases!";
 }
 //------------CURL Request to Mid--------------------------------------------
-$ch = curl_init("https://web.njit.edu/~pm458/cs490/back/logic.php");
-// $ch = curl_init("https://web.njit.edu/~vnp27/cs490/mid/curlhandler.php");
+// $ch = curl_init("https://web.njit.edu/~pm458/cs490/back/logic.php");
+$ch = curl_init("https://web.njit.edu/~vnp27/cs490/mid/curlhandler.php");
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
