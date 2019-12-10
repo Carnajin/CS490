@@ -1,0 +1,277 @@
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+textarea {
+    resize: none;
+}
+
+hr.qbreak {
+    border: 2px solid grey;
+    border-radius: 2px;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.125em;
+    line-height: 1.6;
+    color: black;
+    overflow-x: hidden;
+    background: rgb(226, 222, 216);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body h1 {
+    font-size: 1.125em;
+}
+
+body h2 {
+    font-size: 1.125em;
+}
+
+header nav button {
+    background: none;
+    color: rgb(0,0,0);
+    width: 120px;
+    height: 40px;
+    border: 1px solid #338033;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: .6s;
+    overflow: hidden;
+}
+
+header nav button:focus {
+    outline: none;
+}
+
+header nav button:after {
+    content: '';
+    display: block;
+    position: absolute;
+    background: rgba(255,255,255,.5);
+    width: 0;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+header button:hover {
+    background: #338033;
+    cursor: pointer;
+}
+
+header nav ul {
+    display: flex;
+    list-style: none;
+}
+header nav li {
+    margin-left: 15px;
+    margin-bottom: 0;
+    display: inline-block;
+}
+
+header nav h3.sort_bar {
+    font-size: .725em;
+}
+
+div.textbox {
+    display:grid;
+    grid-template-columns: max-content max-content;
+    grid-gap:5px;
+    height: 5%;
+    border: none;
+    
+}
+div.textbox label { 
+    text-align:right; 
+}
+
+div.textbox label:after { 
+    content: ""; 
+}
+
+div.textbox input {
+    border-radius: 0.5em;
+}
+
+.right #pointbox {
+    display: none;
+}
+
+.right .labelPoints {
+    display: none;
+}
+
+.right fieldset {
+    background: rgb(216, 211, 205);
+}
+
+.right fieldset:nth-child(odd) {
+    background: rgb(199, 194, 188);
+}
+
+.right button {
+    background: none;
+    color: rgb(0,0,0);
+    width: 80px;
+    height: 40px;
+    border: 1px solid #338033;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: .6s;
+    overflow: hidden;
+}
+
+.right button:focus {
+    outline: none;
+}
+
+.right button:after {
+    content: '';
+    display: block;
+    position: absolute;
+    background: rgba(255,255,255,.5);
+    width: 0px;
+    height: 100%;
+    left: 0px;
+    top: 0;
+    opacity: 0;
+}
+
+.right button:hover {
+    background: #338033;
+    cursor: pointer;
+}
+
+table, th, td {
+    border: 2px solid black;
+    padding-bottom: 0;
+  }
+
+div {
+    height: 100%;
+    width: 100%;
+    border-left: 2px solid black;
+  }
+
+.split {
+    height: 110%;
+    width: 49%;
+    position: fixed;
+    z-index: 1;
+    overflow-x: hidden;
+    padding-top: 10px;
+    padding-left: 5px;
+  }
+
+header {
+    background:#c5beb0;
+    width: 51%;
+    height: 28%;
+    text-align: center;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+header h1 {
+    font-size: 1.25em;
+    text-align: left;
+    font-family: sans-serif;
+}
+  
+.left {
+    width: 50%;
+    height: 100%;
+    float: left;
+    padding-bottom: 140px;
+  }
+  
+.right {
+    right: 0;
+    padding-left: 0px;
+    padding-top: 0px;
+    height: 100%;
+    display: inline-block;
+  }
+
+.right h3 {
+      font-family: sans-serif;
+      font-size: 1.25em;
+  }
+
+header h1 {
+    font-size: 1.25em;
+    text-align: left;
+    font-family: sans-serif;
+}
+
+.student_area button {
+    background: none;
+    color: rgb(0,0,0);
+    width: 120px;
+    height: 40px;
+    border: 1px solid #338033;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: .6s;
+    overflow: hidden;
+}
+
+.student_area button:focus {
+    outline: none;
+}
+
+.student_area button:after {
+    content: '';
+    display: block;
+    position: absolute;
+    background: rgba(255,255,255,.5);
+    width: 0px;
+    height: 100%;
+    left: 0px;
+    top: 0;
+    opacity: 0;
+}
+
+.student_area button:hover {
+    background: #338033;
+    cursor: pointer;
+}
+
+.student_area .logout_button button {
+    float: right;
+    margin-top: 10px;
+}
+
+.student_area .logout_button{
+    height: 10%;
+}
+
+div.examTitle {
+    background: black;
+    color: white;
+    width: 100%;
+    height: 13%;
+    overflow-x: hidden;
+    display: inline-block;
+}
+
+div.qArea {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    overflow-x: visible;
+}
+.qArea legend {
+    color: black;
+    font-weight: bold;
+}  
