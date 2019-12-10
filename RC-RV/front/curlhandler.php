@@ -80,7 +80,7 @@ switch($message) {
       "grade" => $grade,
       "nPoints" => $fname,
       "rtPoints" => $return,
-      "whilePoints" => $rwhile,
+      "whilePoints" => $while,
       "colonPoints" => $colon,
       "prPoints" => $print,
       "forPoints" => $for,

@@ -606,12 +606,8 @@ function createExam(){
         var comm = document.getElementsByName("comm[]");
 
         for(var i=0; i<grd.length; i++){
-          if(document.getElementById('rtn' + i)){rtn.push(document.getElementById('rtn' + i).value);
-            }else{rtn.push(0);
-          }
-          if(document.getElementById('fun' + i)){fun.push(document.getElementById('fun' + i).value);
-            }else{fun.push(0);
-          }
+          if(document.getElementById('rtn' + i)){rtn.push(document.getElementById('rtn' + i).value);}else{rtn.push(0);}
+          if(document.getElementById('fun' + i)){fun.push(document.getElementById('fun' + i).value);}else{fun.push(0);}
           if(document.getElementById('col' + i)){col.push(document.getElementById('col' + i).value);
             }else{col.push(0);
           }
