@@ -77,7 +77,6 @@
 //LF---------------------Logout Function----------------------------------
     
     function logout(){
-      console.log("Logout Button Click");
       window.location.href = "index.html";
     }
 
@@ -117,7 +116,6 @@ function createExam(){
     
     function createQuestion(){
       message = "CreateQuestion";
-      console.log("Create Question Button Click");
       document.getElementById("insertFieldRight").innerHTML = ''; 
       document.getElementById("response_area").innerHTML = '';
       document.getElementById("work_area").innerHTML = '\
@@ -164,7 +162,6 @@ function createExam(){
     };
     
     function updateQB(jsonData){
-      console.log("submit");
       document.getElementById("response_area").innerHTML = jsonData.response;
       showQuestions();
     }
@@ -424,21 +421,43 @@ function createExam(){
     function totalCalc(i, ptt){
       var total = ptt;
       
-      if(document.getElementById('rtn' + i)){total -= document.getElementById('rtn' + i).value;}
-      if(document.getElementById('fun' + i)){total -= document.getElementById('fun' + i).value;}
-      if(document.getElementById('col' + i)){total -= document.getElementById('col' + i).value;}
-      if(document.getElementById('prt' + i)){total -= document.getElementById('prt' + i).value;}
-      if(document.getElementById('whi' + i)){total -= document.getElementById('whi' + i).value;}
-      if(document.getElementById('fr' + i)){total -= document.getElementById('fr' + i).value;}
-      if(document.getElementById('tcer1' + i)){total -= document.getElementById('tcer1' + i).value;}
-      if(document.getElementById('tcer2' + i)){total -= document.getElementById('tcer2' + i).value;}
-      if(document.getElementById('tcer3' + i)){total -= document.getElementById('tcer3' + i).value;}
-      if(document.getElementById('tcer4' + i)){total -= document.getElementById('tcer4' + i).value;}
-      if(document.getElementById('tcer5' + i)){total -= document.getElementById('tcer5' + i).value;}
-      if(document.getElementById('tcer6' + i)){total -= document.getElementById('tcer6' + i).value;}
+      if(document.getElementById('rtn' + i)){
+        total -= document.getElementById('rtn' + i).value;
+      }
+      if(document.getElementById('fun' + i)){
+        total -= document.getElementById('fun' + i).value;
+      }
+      if(document.getElementById('col' + i)){
+        total -= document.getElementById('col' + i).value;
+      }
+      if(document.getElementById('prt' + i)){
+        total -= document.getElementById('prt' + i).value;
+      }
+      if(document.getElementById('whi' + i)){
+        total -= document.getElementById('whi' + i).value;
+      }
+      if(document.getElementById('fr' + i)){
+        total -= document.getElementById('fr' + i).value;
+      }
+      if(document.getElementById('tcer1' + i)){
+        total -= document.getElementById('tcer1' + i).value;
+      }
+      if(document.getElementById('tcer2' + i)){
+        total -= document.getElementById('tcer2' + i).value;
+      }
+      if(document.getElementById('tcer3' + i)){
+        total -= document.getElementById('tcer3' + i).value;
+      }
+      if(document.getElementById('tcer4' + i)){
+        total -= document.getElementById('tcer4' + i).value;
+      }
+      if(document.getElementById('tcer5' + i)){
+        total -= document.getElementById('tcer5' + i).value;
+      }
+      if(document.getElementById('tcer6' + i)){
+        total -= document.getElementById('tcer6' + i).value;
+      }
       document.getElementsByName('grd[]')[i].value = (total);
-
-     // document.getElementsByName('grd[]')[i].value = jsonData[i].grade;
     }
 
     function totalPoints(){
@@ -581,7 +600,6 @@ function createExam(){
     
     function submit(cFunction){
       var formData = new FormData(document.querySelector("form"));
-      console.log(message);
       formData.append("message", message);
       
       if(message == "CreateExam"){
@@ -606,37 +624,53 @@ function createExam(){
         var comm = document.getElementsByName("comm[]");
 
         for(var i=0; i<grd.length; i++){
-          if(document.getElementById('rtn' + i)){rtn.push(document.getElementById('rtn' + i).value);}else{rtn.push(0);}
-          if(document.getElementById('fun' + i)){fun.push(document.getElementById('fun' + i).value);}else{fun.push(0);}
+          if(document.getElementById('rtn' + i)){rtn.push(document.getElementById('rtn' + i).value);
+            }else{
+              rtn.push(0);
+          }
+          if(document.getElementById('fun' + i)){fun.push(document.getElementById('fun' + i).value);
+            }else{
+              fun.push(0);
+          }
           if(document.getElementById('col' + i)){col.push(document.getElementById('col' + i).value);
-            }else{col.push(0);
+            }else{
+              col.push(0);
           }
           if(document.getElementById('whi' + i)){whi.push(document.getElementById('whi' + i).value);
-            }else{whi.push(0);
+            }else{
+              whi.push(0);
           }
           if(document.getElementById('prt' + i)){prt.push(document.getElementById('prt' + i).value);
-            }else{prt.push(0);
+            }else{
+              prt.push(0);
           }
           if(document.getElementById('fr' + i)){fr.push(document.getElementById('fr' + i).value);
-            }else{fr.push(0);
+            }else{
+              fr.push(0);
           }
           if(document.getElementById('tcer1' + i)){tce1.push(document.getElementById('tcer1' + i).value);
-            }else{tce1.push(0);
+            }else{
+              tce1.push(0);
           }
           if(document.getElementById('tcer2' + i)){tce2.push(document.getElementById('tcer2' + i).value);
-            }else{tce2.push(0);
+            }else{
+              tce2.push(0);
           }
           if(document.getElementById('tcer3' + i)){tce3.push(document.getElementById('tcer3' + i).value);
-            }else{tce3.push(0);
+            }else{
+              tce3.push(0);
           }
           if(document.getElementById('tcer4' + i)){tce4.push(document.getElementById('tcer4' + i).value);
-            }else{tce4.push(0);
+            }else{
+              tce4.push(0);
           }
           if(document.getElementById('tcer5' + i)){tce5.push(document.getElementById('tcer5' + i).value);
-            }else{tce5.push(0);
+            }else{
+              tce5.push(0);
           }
           if(document.getElementById('tcer6' + i)){tce6.push(document.getElementById('tcer6' + i).value);
-            }else{tce6.push(0);
+            }else{
+              tce6.push(0);
           }
 
           grade.push(grd[i].value);
@@ -661,6 +695,7 @@ function createExam(){
         formData.append("examId", gexid);
         formData.append("grade", grade);
         formData.append("comments", comments);
+
         document.getElementById("status_area").innerHTML = 'Exam Has Been Released!';
       }
 
@@ -671,16 +706,11 @@ function createExam(){
       if(message == "CreateQuestion"){
         document.getElementById("status_area").innerHTML = 'Question Successfully Submitted!';
       }
-      for(var pair of formData.entries()){
-        console.log(pair[0]+ ', '+ pair[1]);
-      }
 
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200) {
-          console.log(this.responseText);
           jsonData = JSON.parse(this.responseText);
-          console.log(jsonData);
           cFunction(jsonData);
         }
       };
@@ -689,7 +719,6 @@ function createExam(){
       xhr.send(formData);
       
     }
-    // showQuestions();
     user();
   </script>
 </html>
